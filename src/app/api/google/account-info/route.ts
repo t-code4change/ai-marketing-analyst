@@ -13,10 +13,13 @@ export async function GET(request: NextRequest) {
     const websiteId = searchParams.get('websiteId');
     if (!websiteId) return NextResponse.json({ error: 'websiteId required' }, { status: 400 });
 
-    const connection = await getGoogleConnection(websiteId, 'analytics') as any;
-    if (!connection) return NextResponse.json({ connected: false });
+    const [analyticsConn, scConn] = await Promise.all([
+      getGoogleConnection(websiteId, 'analytics') as Promise<any>,
+      getGoogleConnection(websiteId, 'search_console') as Promise<any>,
+    ]);
+    if (!analyticsConn) return NextResponse.json({ connected: false });
 
-    const accessToken = await getValidGoogleTokens(connection.id);
+    const accessToken = await getValidGoogleTokens(analyticsConn.id);
 
     // Get user info
     const auth = new google.auth.OAuth2();
@@ -29,8 +32,8 @@ export async function GET(request: NextRequest) {
       email: userInfo.data.email,
       name: userInfo.data.name,
       picture: userInfo.data.picture,
-      propertyId: connection.propertyId,
-      siteUrl: connection.siteUrl,
+      propertyId: analyticsConn.propertyId,
+      siteUrl: scConn?.siteUrl || null,
     });
   } catch (error: any) {
     return NextResponse.json({ connected: false, error: error.message });
