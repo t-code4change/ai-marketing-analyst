@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
       expiresAt: tokens.expiry_date,
     });
 
-    return NextResponse.redirect(new URL('/settings?success=google_connected', request.url));
+    return NextResponse.redirect(new URL('/settings?setup=true', request.url));
   } catch (error: any) {
     console.error('Google OAuth error:', error);
     return NextResponse.redirect(new URL(`/settings?error=oauth_failed`, request.url));

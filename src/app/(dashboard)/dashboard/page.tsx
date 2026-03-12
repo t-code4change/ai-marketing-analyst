@@ -67,7 +67,7 @@ export default function DashboardPage() {
           <p className="text-sm font-bold text-black/50 uppercase tracking-wider">OVERVIEW — LAST 30 DAYS</p>
         </div>
         <button
-          onClick={generateReport}
+          onClick={() => generateReport()}
           disabled={generating}
           className="flex items-center gap-2 border-[2px] border-black bg-[#FFE500] px-4 py-2.5 font-black text-sm shadow-[3px_3px_0px_#000] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_#000] transition-all disabled:opacity-50"
         >

@@ -10,15 +10,16 @@ export function createOAuthClient() {
 
 export function getAuthUrl(websiteId: string) {
   const client = createOAuthClient();
-  
+
   return client.generateAuthUrl({
     access_type: 'offline',
     prompt: 'consent',
     scope: [
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/userinfo.profile',
       'https://www.googleapis.com/auth/analytics.readonly',
       'https://www.googleapis.com/auth/webmasters.readonly',
-      'https://www.googleapis.com/auth/adwords',
-      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/adsense.readonly',
     ],
     state: websiteId,
   });

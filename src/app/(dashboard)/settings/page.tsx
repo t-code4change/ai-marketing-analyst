@@ -1,62 +1,91 @@
 'use client';
 
 import { useWebsite } from '@/hooks/useWebsite';
-import { useEffect, useState } from 'react';
-import { Connection } from '@/types';
-import { CheckCircle2, XCircle, ExternalLink, Github, BarChart3, Megaphone, Search } from 'lucide-react';
+import { GoogleConnectFlow } from '@/components/settings/GoogleConnectFlow';
+import { Github, Plus, AlertTriangle } from 'lucide-react';
+import { useState } from 'react';
 
-function ConnectionCard({
-  type,
-  label,
-  icon: Icon,
-  accentColor,
-  connected,
-  accountInfo,
-  onConnect,
-  onDisconnect,
-}: {
-  type: string;
-  label: string;
-  icon: any;
-  accentColor: string;
-  connected: boolean;
-  accountInfo?: string;
-  onConnect: () => void;
-  onDisconnect: () => void;
-}) {
+function GitHubConnectCard({ websiteId }: { websiteId: string }) {
+  const [owner, setOwner] = useState('');
+  const [repo, setRepo] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
+
+  async function handleConnect(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch('/api/connect/github', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ websiteId, owner, repo }),
+      });
+      if (!res.ok) {
+        const d = await res.json();
+        throw new Error(d.error || 'Failed');
+      }
+      setSuccess(true);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <div className="border-[2px] border-black bg-white shadow-[3px_3px_0px_#000]">
-      <div className="border-b-[2px] border-black px-4 py-3 flex items-center gap-3" style={{ backgroundColor: accentColor }}>
-        <Icon className="w-5 h-5" strokeWidth={2.5} />
-        <span className="font-black text-sm uppercase tracking-wider">{label}</span>
-        {connected ? (
-          <CheckCircle2 className="w-4 h-4 ml-auto" strokeWidth={3} />
-        ) : (
-          <XCircle className="w-4 h-4 ml-auto text-black/40" strokeWidth={2} />
-        )}
+    <div className="border-[3px] border-black bg-white shadow-[4px_4px_0px_#000]">
+      <div className="border-b-[3px] border-black bg-black px-6 py-4 flex items-center gap-3">
+        <Github className="w-5 h-5 text-white" strokeWidth={2} />
+        <div>
+          <h2 className="font-black text-lg text-white uppercase tracking-wide">GITHUB REPO</h2>
+          <p className="text-xs font-bold text-white/50">Phân tích SEO issues trong code của bạn</p>
+        </div>
       </div>
-      <div className="p-4">
-        {connected ? (
-          <div className="space-y-3">
-            <div className="border-[1.5px] border-black bg-[#4DFFB4]/20 px-3 py-2">
-              <p className="text-xs font-black text-black/50 uppercase">CONNECTED</p>
-              {accountInfo && <p className="text-sm font-bold">{accountInfo}</p>}
-            </div>
-            <button
-              onClick={onDisconnect}
-              className="w-full border-[2px] border-black bg-[#FF6B6B] py-2 font-black text-xs shadow-[2px_2px_0px_#000] hover:shadow-[3px_3px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all"
-            >
-              DISCONNECT
-            </button>
+      <div className="p-6">
+        {success ? (
+          <div className="border-[2px] border-black bg-[#4DFFB4] px-4 py-3">
+            <p className="font-black text-sm">✓ GitHub repo connected! Đang phân tích code...</p>
           </div>
         ) : (
-          <button
-            onClick={onConnect}
-            className="w-full border-[2px] border-black bg-black text-white py-2.5 font-black text-xs shadow-[2px_2px_0px_#000] hover:shadow-[3px_3px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all flex items-center justify-center gap-2"
-          >
-            <ExternalLink className="w-3.5 h-3.5" strokeWidth={2.5} />
-            CONNECT {label.toUpperCase()}
-          </button>
+          <form onSubmit={handleConnect} className="space-y-4">
+            {error && (
+              <div className="border-[2px] border-black bg-[#FF6B6B] px-4 py-2">
+                <p className="text-sm font-bold">{error}</p>
+              </div>
+            )}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-black mb-1 uppercase tracking-wider">GitHub Owner</label>
+                <input
+                  value={owner}
+                  onChange={e => setOwner(e.target.value)}
+                  placeholder="username or org"
+                  required
+                  className="w-full border-[2px] border-black px-3 py-2 text-sm font-medium focus:outline-none focus:shadow-[2px_2px_0px_#000] transition-shadow"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-black mb-1 uppercase tracking-wider">Repo Name</label>
+                <input
+                  value={repo}
+                  onChange={e => setRepo(e.target.value)}
+                  placeholder="repository-name"
+                  required
+                  className="w-full border-[2px] border-black px-3 py-2 text-sm font-medium focus:outline-none focus:shadow-[2px_2px_0px_#000] transition-shadow"
+                />
+              </div>
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full border-[2px] border-black bg-white py-2.5 font-black text-sm shadow-[2px_2px_0px_#000] hover:bg-[#FFE500] hover:shadow-[3px_3px_0px_#000] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+            >
+              <Github className="w-4 h-4" strokeWidth={2.5} />
+              {loading ? 'CONNECTING...' : 'CONNECT REPO →'}
+            </button>
+          </form>
         )}
       </div>
     </div>
@@ -65,76 +94,38 @@ function ConnectionCard({
 
 export default function SettingsPage() {
   const { currentWebsite } = useWebsite();
-  const [connections, setConnections] = useState<Connection[]>([]);
-
-  useEffect(() => {
-    if (!currentWebsite?.id) return;
-    fetch(`/api/connections?websiteId=${currentWebsite.id}`)
-      .then(r => r.ok ? r.json() : { connections: [] })
-      .then(d => setConnections(d.connections || []));
-  }, [currentWebsite?.id]);
-
-  function isConnected(type: string) {
-    return connections.some(c => c.type === type && c.connected);
-  }
-
-  function connectGoogle() {
-    if (!currentWebsite?.id) return;
-    window.location.href = `/api/connect/google?websiteId=${currentWebsite.id}`;
-  }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-2xl">
       <div>
         <h1 className="font-black text-2xl tracking-tight">SETTINGS</h1>
-        <p className="text-sm font-bold text-black/50 uppercase tracking-wider">MANAGE CONNECTIONS</p>
+        <p className="text-sm font-bold text-black/50 uppercase tracking-wider">CONNECT YOUR DATA SOURCES</p>
       </div>
 
       {!currentWebsite ? (
-        <div className="border-[3px] border-black bg-[#FFE500] shadow-[6px_6px_0px_#000] p-6">
-          <p className="font-black">Select or add a website first to manage connections.</p>
+        <div className="border-[3px] border-black bg-[#FFE500] shadow-[4px_4px_0px_#000] p-6">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-5 h-5" strokeWidth={3} />
+            <p className="font-black">Chọn hoặc thêm website trước ở trang Websites.</p>
+          </div>
         </div>
       ) : (
         <>
-          <div className="border-[2px] border-black bg-[#FFFEF0] px-4 py-3 shadow-[2px_2px_0px_#000]">
-            <p className="text-xs font-black text-black/50 uppercase tracking-wider">CURRENT WEBSITE</p>
-            <p className="font-black text-lg">{currentWebsite.domain}</p>
+          <div className="border-[2px] border-black bg-[#FFFEF0] px-4 py-3 flex items-center justify-between">
+            <div>
+              <p className="text-xs font-black text-black/40 uppercase tracking-widest">WEBSITE ĐANG CHỌN</p>
+              <p className="font-black text-lg">{currentWebsite.domain}</p>
+            </div>
+            <a
+              href="/settings/websites"
+              className="border-[2px] border-black px-3 py-1.5 text-xs font-black bg-white shadow-[2px_2px_0px_#000] hover:shadow-[3px_3px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all flex items-center gap-1"
+            >
+              <Plus className="w-3 h-3" strokeWidth={3} /> ĐỔI
+            </a>
           </div>
 
-          <h2 className="font-black text-sm uppercase tracking-widest">GOOGLE INTEGRATIONS</h2>
-          <p className="text-xs font-medium text-black/60 -mt-4">
-            Connecting Google will grant access to Analytics, Search Console, and Ads.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <ConnectionCard
-              type="analytics"
-              label="Google Analytics"
-              icon={BarChart3}
-              accentColor="#4D79FF"
-              connected={isConnected('analytics')}
-              onConnect={connectGoogle}
-              onDisconnect={() => {}}
-            />
-            <ConnectionCard
-              type="search_console"
-              label="Search Console"
-              icon={Search}
-              accentColor="#4DFFB4"
-              connected={isConnected('search_console')}
-              onConnect={connectGoogle}
-              onDisconnect={() => {}}
-            />
-            <ConnectionCard
-              type="ads"
-              label="Google Ads"
-              icon={Megaphone}
-              accentColor="#FFE500"
-              connected={isConnected('ads')}
-              onConnect={connectGoogle}
-              onDisconnect={() => {}}
-            />
-          </div>
+          <GoogleConnectFlow websiteId={currentWebsite.id!} />
+          <GitHubConnectCard websiteId={currentWebsite.id!} />
         </>
       )}
     </div>
