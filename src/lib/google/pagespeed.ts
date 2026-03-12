@@ -44,7 +44,11 @@ export async function fetchPageSpeed(url: string, strategy: 'mobile' | 'desktop'
   const fullUrl = `${endpoint}?url=${encodeURIComponent(url)}&strategy=${strategy}&category=performance&category=seo&category=accessibility&category=best-practices${apiKey ? `&key=${apiKey}` : ''}`;
 
   const res = await fetch(fullUrl, { next: { revalidate: 0 } });
-  if (!res.ok) throw new Error(`PageSpeed API error: ${res.status}`);
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    const msg = body?.error?.message || body?.error || `HTTP ${res.status}`;
+    throw new Error(`PageSpeed API: ${msg}`);
+  }
 
   const data = await res.json();
   const cats = data.lighthouseResult?.categories || {};
