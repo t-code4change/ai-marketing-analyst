@@ -23,10 +23,17 @@ export async function GET(request: NextRequest) {
     auth.setCredentials({ access_token: accessToken });
     const analyticsAdmin = google.analyticsadmin({ version: 'v1alpha', auth });
 
-    const accountsResp = await analyticsAdmin.accounts.list();
-    const accounts = accountsResp.data.accounts || [];
+    let accounts: any[] = [];
+    let accountsError = '';
+    try {
+      const accountsResp = await analyticsAdmin.accounts.list();
+      accounts = accountsResp.data.accounts || [];
+    } catch (e: any) {
+      accountsError = e.message;
+    }
 
     const propertiesWithAccounts: any[] = [];
+    const propErrors: string[] = [];
 
     for (const account of accounts) {
       try {
@@ -44,10 +51,15 @@ export async function GET(request: NextRequest) {
             timezone: prop.timeZone,
           });
         }
-      } catch {}
+      } catch (e: any) {
+        propErrors.push(`${account.name}: ${e.message}`);
+      }
     }
 
-    return NextResponse.json({ properties: propertiesWithAccounts });
+    return NextResponse.json({
+      properties: propertiesWithAccounts,
+      _debug: { accountCount: accounts.length, accountsError, propErrors },
+    });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
