@@ -14,9 +14,8 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const websiteId = searchParams.get('websiteId');
-    const siteUrl = searchParams.get('siteUrl');
     const forceRefresh = searchParams.get('refresh') === 'true';
-    if (!websiteId || !siteUrl) return NextResponse.json({ error: 'websiteId and siteUrl required' }, { status: 400 });
+    if (!websiteId) return NextResponse.json({ error: 'websiteId required' }, { status: 400 });
 
     // 1. Check Firestore cache
     if (!forceRefresh) {
@@ -37,9 +36,11 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // 2. Fetch from Google API
+    // 2. Fetch from Google API — use siteUrl saved in connection (e.g. sc-domain:...)
     const connection = await getGoogleConnection(websiteId, 'search_console') as any;
     if (!connection) return NextResponse.json({ error: 'Search Console not connected' }, { status: 404 });
+    const siteUrl = connection.siteUrl;
+    if (!siteUrl) return NextResponse.json({ error: 'Search Console site not selected' }, { status: 400 });
 
     const websiteDoc = await adminDb.collection('websites').doc(websiteId).get();
     const domain = websiteDoc.data()?.domain || websiteId;
