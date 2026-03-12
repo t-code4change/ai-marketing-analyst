@@ -18,31 +18,38 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL('/settings?error=missing_params', request.url));
     }
 
-    // Verify user session
     const session = request.cookies.get('session')?.value;
     if (!session) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
     await adminAuth.verifySessionCookie(session, true);
 
-    // Exchange code for tokens
     const tokens = await exchangeCodeForTokens(code);
 
-    // Save tokens for analytics connection
     await saveConnection(state, 'analytics', {
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token,
       expiresAt: tokens.expiry_date,
     });
 
-    // Also save for search console
     await saveConnection(state, 'search_console', {
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token,
       expiresAt: tokens.expiry_date,
     });
 
-    return NextResponse.redirect(new URL('/settings?setup=true', request.url));
+    // Trigger background sync (fire-and-forget, don't await)
+    const baseUrl = request.nextUrl.origin;
+    fetch(`${baseUrl}/api/sync`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': `session=${session}`,
+      },
+      body: JSON.stringify({ websiteId: state }),
+    }).catch(() => {}); // ignore errors, sync is best-effort
+
+    return NextResponse.redirect(new URL('/settings?setup=true&syncing=true', request.url));
   } catch (error: any) {
     console.error('Google OAuth error:', error);
     return NextResponse.redirect(new URL(`/settings?error=oauth_failed`, request.url));
