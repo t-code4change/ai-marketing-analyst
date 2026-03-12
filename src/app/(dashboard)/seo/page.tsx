@@ -1,63 +1,177 @@
 'use client';
 
-import { useWebsite } from '@/hooks/useWebsite';
 import { useEffect, useState } from 'react';
-import { SEOSummary } from '@/types';
-import { SEOTable } from '@/components/dashboard/SEOTable';
-import { MetricCard } from '@/components/dashboard/MetricCard';
-import {
-  ComposedChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
-} from 'recharts';
+import { useWebsite } from '@/hooks/useWebsite';
+import { getScoreColor, getScoreLabel, PageSpeedResult } from '@/lib/google/pagespeed';
+import { RefreshCw, Smartphone, Monitor, Zap, Search, Eye, Shield } from 'lucide-react';
+
+interface PageSpeedData {
+  domain: string;
+  mobile: PageSpeedResult;
+  desktop: PageSpeedResult;
+  syncedAt: string;
+  fromCache: boolean;
+}
+
+function ScoreCircle({ score, label }: { score: number; label: string }) {
+  const color = getScoreColor(score);
+  return (
+    <div className="flex flex-col items-center gap-1">
+      <div
+        className="w-16 h-16 border-[3px] border-black flex items-center justify-center font-black text-xl shadow-[3px_3px_0px_#000]"
+        style={{ backgroundColor: color }}
+      >
+        {score}
+      </div>
+      <span className="text-xs font-bold text-black uppercase">{label}</span>
+    </div>
+  );
+}
+
+function ScoreCard({ title, icon, result }: { title: string; icon: React.ReactNode; result: PageSpeedResult }) {
+  return (
+    <div className="border-[3px] border-black bg-white shadow-[4px_4px_0px_#000]">
+      <div className="border-b-[3px] border-black bg-[#FFE500] px-4 py-3 flex items-center gap-2">
+        {icon}
+        <span className="font-black text-sm uppercase tracking-wider">{title}</span>
+      </div>
+      <div className="p-4">
+        <div className="flex justify-around mb-4">
+          <ScoreCircle score={result.scores.performance} label="Performance" />
+          <ScoreCircle score={result.scores.seo} label="SEO" />
+          <ScoreCircle score={result.scores.accessibility} label="Accessibility" />
+          <ScoreCircle score={result.scores.bestPractices} label="Best Practices" />
+        </div>
+
+        {/* Core Web Vitals */}
+        <div className="border-t-[2px] border-black pt-3 mt-3">
+          <p className="text-xs font-black uppercase tracking-wider mb-2">Core Web Vitals</p>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { label: 'LCP', value: result.coreWebVitals.lcp, unit: 'ms', good: 2500 },
+              { label: 'FCP', value: result.coreWebVitals.fcp, unit: 'ms', good: 1800 },
+              { label: 'CLS', value: result.coreWebVitals.cls, unit: '', good: 0.1 },
+              { label: 'TTFB', value: result.coreWebVitals.ttfb, unit: 'ms', good: 800 },
+              { label: 'SI', value: result.coreWebVitals.si, unit: 'ms', good: 3400 },
+            ].map(({ label, value, unit, good }) => (
+              <div key={label} className="border-[2px] border-black p-2 text-center"
+                style={{ backgroundColor: value !== null ? getScoreColor(value <= good ? 95 : value <= good * 2 ? 70 : 30) : '#fff' }}>
+                <div className="text-xs font-black">{label}</div>
+                <div className="text-xs font-bold">
+                  {value !== null ? `${label === 'CLS' ? value.toFixed(3) : Math.round(value)}${unit}` : 'N/A'}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Opportunities */}
+        {result.opportunities.length > 0 && (
+          <div className="border-t-[2px] border-black pt-3 mt-3">
+            <p className="text-xs font-black uppercase tracking-wider mb-2">Top Opportunities</p>
+            <div className="space-y-1">
+              {result.opportunities.slice(0, 3).map(opp => (
+                <div key={opp.id} className="border-[2px] border-black bg-[#FFF9E6] p-2">
+                  <p className="text-xs font-bold text-black">{opp.title}</p>
+                  {opp.savings && <p className="text-xs text-black/60">{opp.savings}</p>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default function SEOPage() {
   const { currentWebsite } = useWebsite();
-  const [seo, setSeo] = useState<SEOSummary | null>(null);
+  const [data, setData] = useState<PageSpeedData | null>(null);
   const [loading, setLoading] = useState(false);
-  const [activeTable, setActiveTable] = useState<'query' | 'page'>('query');
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!currentWebsite?.id) return;
-    setLoading(true);
-    fetch(`/api/data/search-console?websiteId=${currentWebsite.id}&siteUrl=https://${currentWebsite.domain}`)
-      .then(r => r.ok ? r.json() : null)
-      .then(data => { if (data?.summary) setSeo(data.summary); })
-      .finally(() => setLoading(false));
+    if (currentWebsite?.id) fetchData();
   }, [currentWebsite?.id]);
 
+  async function fetchData(forceRefresh = false) {
+    if (!currentWebsite?.id) return;
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch(`/api/data/pagespeed?websiteId=${currentWebsite.id}${forceRefresh ? '&refresh=true' : ''}`);
+      const json = await res.json();
+      if (json.error) throw new Error(json.error);
+      setData(json);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="font-black text-2xl tracking-tight">SEO PERFORMANCE</h1>
-        <p className="text-sm font-bold text-black/50 uppercase tracking-wider">SEARCH CONSOLE DATA — 30 DAYS</p>
+    <div className="p-6 space-y-6">
+      {/* Header */}
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="font-black text-3xl text-black uppercase tracking-tight">PageSpeed & SEO</h1>
+          <p className="text-sm font-bold text-black/60 mt-1">
+            {currentWebsite?.domain || 'Select a website'}
+            {data && <span className="ml-2 text-black/40">• {data.fromCache ? 'Cached' : 'Fresh'} • {new Date(data.syncedAt).toLocaleString()}</span>}
+          </p>
+        </div>
+        <button
+          onClick={() => fetchData(true)}
+          disabled={loading || !currentWebsite}
+          className="border-[2px] border-black bg-[#FFE500] px-4 py-2 font-black text-xs shadow-[3px_3px_0px_#000] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_#000] transition-all disabled:opacity-50 flex items-center gap-2 uppercase"
+        >
+          <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+          {loading ? 'Analyzing...' : 'Refresh'}
+        </button>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard title="Total Clicks" value={seo?.totalClicks || 0} accentColor="#4D79FF" loading={loading} />
-        <MetricCard title="Impressions" value={seo?.totalImpressions || 0} accentColor="#FFE500" loading={loading} />
-        <MetricCard title="Avg CTR" value={seo ? `${seo.avgCtr.toFixed(1)}%` : '—'} accentColor="#4DFFB4" loading={loading} />
-        <MetricCard title="Avg Position" value={seo ? `#${seo.avgPosition.toFixed(0)}` : '—'} accentColor="#FF6B6B" loading={loading} />
-      </div>
+      {error && (
+        <div className="border-[2px] border-black bg-[#FF6B6B] px-4 py-3 shadow-[3px_3px_0px_#000]">
+          <p className="font-bold text-sm text-black">{error}</p>
+        </div>
+      )}
 
-      {/* Tables */}
-      <div className="flex gap-0 border-[2px] border-black overflow-hidden w-fit">
-        {(['query', 'page'] as const).map(t => (
+      {loading && !data && (
+        <div className="border-[3px] border-black bg-white p-12 shadow-[4px_4px_0px_#000] text-center">
+          <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-3" />
+          <p className="font-black text-sm uppercase">Analyzing {currentWebsite?.domain}...</p>
+          <p className="text-xs text-black/50 mt-1">This may take 20-30 seconds</p>
+        </div>
+      )}
+
+      {data && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <ScoreCard
+            title="Mobile"
+            icon={<Smartphone className="w-4 h-4" />}
+            result={data.mobile}
+          />
+          <ScoreCard
+            title="Desktop"
+            icon={<Monitor className="w-4 h-4" />}
+            result={data.desktop}
+          />
+        </div>
+      )}
+
+      {!data && !loading && !error && currentWebsite && (
+        <div className="border-[3px] border-black bg-white p-12 shadow-[4px_4px_0px_#000] text-center">
+          <Zap className="w-8 h-8 mx-auto mb-3" />
+          <p className="font-black text-sm uppercase mb-3">No PageSpeed data yet</p>
           <button
-            key={t}
-            onClick={() => setActiveTable(t)}
-            className={`px-5 py-2.5 text-xs font-black border-r-[2px] border-black last:border-r-0 transition-colors ${
-              activeTable === t ? 'bg-black text-[#FFE500]' : 'bg-white hover:bg-[#FFE500]/30'
-            }`}
+            onClick={() => fetchData()}
+            className="border-[2px] border-black bg-[#FFE500] px-6 py-2 font-black text-sm shadow-[3px_3px_0px_#000] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#000] transition-all"
           >
-            {t === 'query' ? 'TOP QUERIES' : 'TOP PAGES'}
+            ANALYZE NOW →
           </button>
-        ))}
-      </div>
-
-      <SEOTable
-        data={activeTable === 'query' ? (seo?.topQueries || []) : (seo?.topPages || [])}
-        type={activeTable}
-        loading={loading}
-      />
+        </div>
+      )}
     </div>
   );
 }

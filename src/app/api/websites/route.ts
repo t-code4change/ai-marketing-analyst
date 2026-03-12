@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminAuth, adminDb } from '@/lib/firebase/admin';
+import { fetchPageSpeed } from '@/lib/google/pagespeed';
 
 export async function GET(request: NextRequest) {
   try {
@@ -44,11 +45,23 @@ export async function POST(request: NextRequest) {
     const ref = await adminDb.collection('websites').add({
       userId: decoded.uid,
       domain: normalizedDomain,
-      name: name || domain,
+      name: name || normalizedDomain,
       createdAt: new Date().toISOString(),
     });
 
-    return NextResponse.json({ id: ref.id, domain, name });
+    // Background: fetch PageSpeed data immediately (fire-and-forget)
+    const websiteId = ref.id;
+    Promise.all([
+      fetchPageSpeed(`https://${normalizedDomain}`, 'mobile'),
+      fetchPageSpeed(`https://${normalizedDomain}`, 'desktop'),
+    ]).then(([mobile, desktop]) => {
+      const syncedAt = new Date().toISOString();
+      adminDb.collection('data_cache').doc(`pagespeed_${websiteId}`).set({
+        websiteId, domain: normalizedDomain, mobile, desktop, syncedAt,
+      }).catch(() => {});
+    }).catch(() => {});
+
+    return NextResponse.json({ id: ref.id, domain: normalizedDomain, name: name || normalizedDomain });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
