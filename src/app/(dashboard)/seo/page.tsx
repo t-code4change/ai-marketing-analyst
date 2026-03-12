@@ -1,17 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useWebsite } from '@/hooks/useWebsite';
+import { usePageSpeed } from '@/hooks/usePageSpeed';
 import { getScoreColor, getScoreLabel, PageSpeedResult } from '@/lib/google/pagespeed';
-import { RefreshCw, Smartphone, Monitor, Zap, Search, Eye, Shield } from 'lucide-react';
-
-interface PageSpeedData {
-  domain: string;
-  mobile: PageSpeedResult;
-  desktop: PageSpeedResult;
-  syncedAt: string;
-  fromCache: boolean;
-}
+import { RefreshCw, Smartphone, Monitor, Zap } from 'lucide-react';
 
 function ScoreCircle({ score, label }: { score: number; label: string }) {
   const color = getScoreColor(score);
@@ -86,29 +78,9 @@ function ScoreCard({ title, icon, result }: { title: string; icon: React.ReactNo
 
 export default function SEOPage() {
   const { currentWebsite } = useWebsite();
-  const [data, setData] = useState<PageSpeedData | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const { mobile, desktop, fromCache, syncedAt, loading, error, refresh } = usePageSpeed(currentWebsite?.id);
 
-  useEffect(() => {
-    if (currentWebsite?.id) fetchData();
-  }, [currentWebsite?.id]);
-
-  async function fetchData(forceRefresh = false) {
-    if (!currentWebsite?.id) return;
-    setLoading(true);
-    setError('');
-    try {
-      const res = await fetch(`/api/data/pagespeed?websiteId=${currentWebsite.id}${forceRefresh ? '&refresh=true' : ''}`);
-      const json = await res.json();
-      if (json.error) throw new Error(json.error);
-      setData(json);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }
+  const data = mobile && desktop ? { mobile, desktop, fromCache, syncedAt } : null;
 
   return (
     <div className="p-6 space-y-6">
@@ -122,7 +94,7 @@ export default function SEOPage() {
           </p>
         </div>
         <button
-          onClick={() => fetchData(true)}
+          onClick={() => refresh()}
           disabled={loading || !currentWebsite}
           className="border-[2px] border-black bg-[#FFE500] px-4 py-2 font-black text-xs shadow-[3px_3px_0px_#000] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_#000] transition-all disabled:opacity-50 flex items-center gap-2 uppercase"
         >
@@ -165,7 +137,7 @@ export default function SEOPage() {
           <Zap className="w-8 h-8 mx-auto mb-3" />
           <p className="font-black text-sm uppercase mb-3">No PageSpeed data yet</p>
           <button
-            onClick={() => fetchData()}
+            onClick={() => refresh()}
             className="border-[2px] border-black bg-[#FFE500] px-6 py-2 font-black text-sm shadow-[3px_3px_0px_#000] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#000] transition-all"
           >
             ANALYZE NOW →

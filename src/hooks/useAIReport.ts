@@ -1,60 +1,56 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { AIReport } from '@/types';
+import { queryKeys } from '@/lib/query/keys';
+
+async function fetchReports(websiteId: string): Promise<AIReport[]> {
+  const res = await fetch(`/api/ai/report?websiteId=${websiteId}`);
+  if (!res.ok) throw new Error('Failed to fetch reports');
+  const data = await res.json();
+  return data.reports || [];
+}
+
+async function generateReportFn(params: { websiteId: string; provider?: string; apiKey?: string; model?: string }): Promise<AIReport> {
+  const res = await fetch('/api/ai/analyze', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) throw new Error('Failed to generate report');
+  const data = await res.json();
+  return data.report;
+}
 
 export function useAIReport(websiteId?: string) {
-  const [reports, setReports] = useState<AIReport[]>([]);
-  const [latestReport, setLatestReport] = useState<AIReport | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [generating, setGenerating] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
-  const fetchReports = useCallback(async () => {
+  const { data: reports = [], isLoading: loading, error } = useQuery({
+    queryKey: queryKeys.aiReports(websiteId || ''),
+    queryFn: () => fetchReports(websiteId!),
+    enabled: !!websiteId,
+    staleTime: 10 * 60 * 1000, // 10 min
+  });
+
+  const mutation = useMutation({
+    mutationFn: generateReportFn,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.aiReports(websiteId || '') });
+    },
+  });
+
+  const generateReport = (options?: { provider?: string; apiKey?: string; model?: string }) => {
     if (!websiteId) return;
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/ai/report?websiteId=${websiteId}`);
-      if (!res.ok) throw new Error('Failed to fetch reports');
-      const data = await res.json();
-      setReports(data.reports || []);
-      setLatestReport(data.reports?.[0] || null);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [websiteId]);
+    mutation.mutate({ websiteId, ...options });
+  };
 
-  useEffect(() => {
-    fetchReports();
-  }, [fetchReports]);
-
-  const generateReport = useCallback(async (options?: { provider?: string; apiKey?: string; model?: string }) => {
-    if (!websiteId) return;
-    setGenerating(true);
-    setError(null);
-    try {
-      const res = await fetch('/api/ai/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          websiteId,
-          provider: options?.provider,
-          apiKey: options?.apiKey,
-          model: options?.model,
-        }),
-      });
-      if (!res.ok) throw new Error('Failed to generate report');
-      const data = await res.json();
-      setLatestReport(data.report);
-      setReports(prev => [data.report, ...prev]);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setGenerating(false);
-    }
-  }, [websiteId]);
-
-  return { reports, latestReport, loading, generating, error, generateReport, refetch: fetchReports };
+  return {
+    reports,
+    latestReport: reports[0] || null,
+    loading,
+    generating: mutation.isPending,
+    error: error?.message || mutation.error?.message || null,
+    generateReport,
+    refetch: () => queryClient.invalidateQueries({ queryKey: queryKeys.aiReports(websiteId || '') }),
+  };
 }

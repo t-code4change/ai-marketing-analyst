@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Syne, Space_Grotesk, DM_Mono } from "next/font/google";
 import "./globals.css";
+import { QueryProvider } from "@/providers/QueryProvider";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -38,7 +39,9 @@ export default function RootLayout({
       <body
         className={`${syne.variable} ${spaceGrotesk.variable} ${dmMono.variable} font-sans antialiased bg-[#FAFAFA]`}
       >
-        {children}
+        <QueryProvider>
+          {children}
+        </QueryProvider>
       </body>
     </html>
   );
