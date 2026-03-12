@@ -309,15 +309,13 @@ export function GoogleConnectFlow({ websiteId }: GoogleConnectFlowProps) {
               <label className="font-black text-xs uppercase tracking-widest">Google Ads Account</label>
               <span className="text-xs font-medium text-black/40">(optional)</span>
             </div>
-            {adsError ? (
+            {adsError && !adsError.includes('GOOGLE_ADS_DEVELOPER_TOKEN') ? (
               <div className="border-[2px] border-black bg-[#FFE500]/20 px-4 py-3 text-xs font-bold">
-                ⚠ {adsError.includes('GOOGLE_ADS_DEVELOPER_TOKEN')
-                  ? 'Google Ads chưa được cấu hình. Cần GOOGLE_ADS_DEVELOPER_TOKEN.'
-                  : adsError}
+                ⚠ {adsError}
               </div>
             ) : adsAccounts.length === 0 ? (
-              <div className="border-[2px] border-black bg-black/5 px-4 py-3 text-xs font-medium text-black/50">
-                Không tìm thấy Google Ads account nào. Bỏ qua nếu bạn không chạy Ads.
+              <div className="border-[2px] border-black bg-black/5 px-4 py-3 text-xs font-medium text-black/40">
+                Bỏ qua nếu bạn không chạy Google Ads.
               </div>
             ) : (
               <div className="space-y-1.5 max-h-40 overflow-y-auto border-[2px] border-black">
@@ -468,8 +466,8 @@ export function GoogleConnectFlow({ websiteId }: GoogleConnectFlowProps) {
                 ID: {accountInfo.adsCustomerId}
               </span>
             ) : (
-              <span className="border-[1.5px] border-black bg-black/10 px-2 py-0.5 text-xs font-black text-black/40">
-                NOT CONNECTED
+              <span className="border-[1.5px] border-black bg-black/5 px-2 py-0.5 text-xs font-medium text-black/30">
+                SKIP
               </span>
             )}
           </div>
