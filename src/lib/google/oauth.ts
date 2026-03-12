@@ -19,7 +19,7 @@ export function getAuthUrl(websiteId: string) {
       'https://www.googleapis.com/auth/userinfo.profile',
       'https://www.googleapis.com/auth/analytics.readonly',
       'https://www.googleapis.com/auth/webmasters.readonly',
-      'https://www.googleapis.com/auth/adsense.readonly',
+      'https://www.googleapis.com/auth/adwords',
     ],
     state: websiteId,
   });

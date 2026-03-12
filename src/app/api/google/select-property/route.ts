@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     await adminAuth.verifySessionCookie(session, true);
 
-    const { websiteId, analyticsPropertyId, searchConsoleSiteUrl, accountId } = await request.json();
+    const { websiteId, analyticsPropertyId, searchConsoleSiteUrl, accountId, adsCustomerId } = await request.json();
     if (!websiteId) return NextResponse.json({ error: 'websiteId required' }, { status: 400 });
 
     const updates: Promise<any>[] = [];
@@ -33,6 +33,18 @@ export async function POST(request: NextRequest) {
           adminDb.collection('connections').doc(conn.id).update({
             propertyId: searchConsoleSiteUrl,
             siteUrl: searchConsoleSiteUrl,
+            configuredAt: new Date().toISOString(),
+          })
+        );
+      }
+    }
+
+    if (adsCustomerId) {
+      const conn = await getGoogleConnection(websiteId, 'ads') as any;
+      if (conn) {
+        updates.push(
+          adminDb.collection('connections').doc(conn.id).update({
+            customerId: adsCustomerId,
             configuredAt: new Date().toISOString(),
           })
         );

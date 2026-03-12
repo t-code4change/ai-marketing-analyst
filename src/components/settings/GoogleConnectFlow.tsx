@@ -13,6 +13,7 @@ interface AccountInfo {
   picture?: string;
   propertyId?: string;
   siteUrl?: string;
+  adsCustomerId?: string;
 }
 
 interface GAProperty {
@@ -28,6 +29,12 @@ interface GSCSite {
   permissionLevel: string;
 }
 
+interface AdsAccount {
+  customerId: string;
+  name: string;
+  currencyCode: string;
+}
+
 interface GoogleConnectFlowProps {
   websiteId: string;
 }
@@ -37,11 +44,14 @@ export function GoogleConnectFlow({ websiteId }: GoogleConnectFlowProps) {
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
   const [properties, setProperties] = useState<GAProperty[]>([]);
   const [sites, setSites] = useState<GSCSite[]>([]);
+  const [adsAccounts, setAdsAccounts] = useState<AdsAccount[]>([]);
   const [selectedProperty, setSelectedProperty] = useState('');
   const [selectedSite, setSelectedSite] = useState('');
+  const [selectedAdsCustomer, setSelectedAdsCustomer] = useState('');
   const [saving, setSaving] = useState(false);
   const [loadingProps, setLoadingProps] = useState(false);
   const [error, setError] = useState('');
+  const [adsError, setAdsError] = useState('');
 
   useEffect(() => {
     loadAccountInfo();
@@ -57,6 +67,7 @@ export function GoogleConnectFlow({ websiteId }: GoogleConnectFlowProps) {
         setStep('connected');
         if (data.propertyId) setSelectedProperty(data.propertyId);
         if (data.siteUrl) setSelectedSite(data.siteUrl);
+        if (data.adsCustomerId) setSelectedAdsCustomer(data.adsCustomerId);
       } else {
         setStep('disconnected');
       }
@@ -68,15 +79,21 @@ export function GoogleConnectFlow({ websiteId }: GoogleConnectFlowProps) {
   async function loadPropertiesAndSites() {
     setLoadingProps(true);
     setError('');
+    setAdsError('');
     try {
-      const [propsRes, sitesRes] = await Promise.all([
+      const [propsRes, sitesRes, adsRes] = await Promise.all([
         fetch(`/api/google/properties?websiteId=${websiteId}`),
         fetch(`/api/google/sites?websiteId=${websiteId}`),
+        fetch(`/api/google/ads-accounts?websiteId=${websiteId}`),
       ]);
       const propsData = await propsRes.json();
       const sitesData = await sitesRes.json();
+      const adsData = await adsRes.json();
       setProperties(propsData.properties || []);
       setSites(sitesData.sites || []);
+      setAdsAccounts(adsData.accounts || []);
+      if (adsData.warning) setAdsError(adsData.warning);
+      if (adsData.error && !adsData.accounts) setAdsError(adsData.error);
       setStep('selecting');
     } catch (err: any) {
       setError('Failed to load your Google properties. Try reconnecting.');
@@ -96,6 +113,7 @@ export function GoogleConnectFlow({ websiteId }: GoogleConnectFlowProps) {
           websiteId,
           analyticsPropertyId: selectedProperty,
           searchConsoleSiteUrl: selectedSite,
+          adsCustomerId: selectedAdsCustomer || undefined,
         }),
       });
       if (!res.ok) throw new Error('Failed to save selection');
@@ -138,17 +156,16 @@ export function GoogleConnectFlow({ websiteId }: GoogleConnectFlowProps) {
         <div className="border-b-[3px] border-black bg-[#FFE500] px-6 py-4">
           <h2 className="font-black text-lg uppercase tracking-wide">CONNECT GOOGLE ACCOUNT</h2>
           <p className="text-sm font-bold text-black/60 mt-0.5">
-            Cấp quyền để lấy data Analytics, Search Console của tài khoản bạn
+            Cấp quyền để lấy data Analytics, Search Console và Ads của tài khoản bạn
           </p>
         </div>
 
         <div className="p-6 space-y-4">
-          {/* What we'll access */}
           <div className="space-y-2">
             {[
               { icon: BarChart3, color: '#4D79FF', title: 'Google Analytics 4', desc: 'Sessions, users, conversions, bounce rate' },
               { icon: Search, color: '#4DFFB4', title: 'Google Search Console', desc: 'Organic clicks, impressions, keywords, rankings' },
-              { icon: Megaphone, color: '#FFE500', title: 'Google Ads (read-only)', desc: 'Campaigns, spend, CPC, conversions' },
+              { icon: Megaphone, color: '#FF8C00', title: 'Google Ads', desc: 'Campaigns, spend, CPC, conversions, CTR' },
             ].map(({ icon: Icon, color, title, desc }) => (
               <div key={title} className="flex items-center gap-3 border-[2px] border-black p-3">
                 <div className="w-8 h-8 border-[2px] border-black flex items-center justify-center shrink-0" style={{ backgroundColor: color }}>
@@ -191,7 +208,7 @@ export function GoogleConnectFlow({ websiteId }: GoogleConnectFlowProps) {
         <div className="border-b-[3px] border-black bg-black px-6 py-4">
           <h2 className="font-black text-lg text-[#FFE500] uppercase tracking-wide">CHỌN PROPERTY</h2>
           <p className="text-sm font-bold text-white/60 mt-0.5">
-            Chọn GA4 property và Search Console site bạn muốn theo dõi
+            Chọn GA4 property, Search Console site và Google Ads account
           </p>
         </div>
 
@@ -283,6 +300,67 @@ export function GoogleConnectFlow({ websiteId }: GoogleConnectFlowProps) {
             )}
           </div>
 
+          {/* Google Ads accounts */}
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-5 h-5 border-[2px] border-black bg-[#FF8C00] flex items-center justify-center">
+                <Megaphone className="w-3 h-3 text-white" strokeWidth={3} />
+              </div>
+              <label className="font-black text-xs uppercase tracking-widest">Google Ads Account</label>
+              <span className="text-xs font-medium text-black/40">(optional)</span>
+            </div>
+            {adsError ? (
+              <div className="border-[2px] border-black bg-[#FFE500]/20 px-4 py-3 text-xs font-bold">
+                ⚠ {adsError.includes('GOOGLE_ADS_DEVELOPER_TOKEN')
+                  ? 'Google Ads chưa được cấu hình. Cần GOOGLE_ADS_DEVELOPER_TOKEN.'
+                  : adsError}
+              </div>
+            ) : adsAccounts.length === 0 ? (
+              <div className="border-[2px] border-black bg-black/5 px-4 py-3 text-xs font-medium text-black/50">
+                Không tìm thấy Google Ads account nào. Bỏ qua nếu bạn không chạy Ads.
+              </div>
+            ) : (
+              <div className="space-y-1.5 max-h-40 overflow-y-auto border-[2px] border-black">
+                <label
+                  className={`flex items-center gap-3 px-4 py-3 cursor-pointer border-b-[1px] border-black/10 transition-colors ${
+                    selectedAdsCustomer === '' ? 'bg-black/5' : 'hover:bg-[#FFE500]/20'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="ads-account"
+                    value=""
+                    checked={selectedAdsCustomer === ''}
+                    onChange={() => setSelectedAdsCustomer('')}
+                    className="shrink-0"
+                  />
+                  <p className="font-black text-sm text-black/40">Không chọn (skip)</p>
+                </label>
+                {adsAccounts.map((acc) => (
+                  <label
+                    key={acc.customerId}
+                    className={`flex items-center gap-3 px-4 py-3 cursor-pointer border-b-[1px] border-black/10 last:border-0 transition-colors ${
+                      selectedAdsCustomer === acc.customerId ? 'bg-[#FF8C00]/10' : 'hover:bg-[#FFE500]/20'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="ads-account"
+                      value={acc.customerId}
+                      checked={selectedAdsCustomer === acc.customerId}
+                      onChange={() => setSelectedAdsCustomer(acc.customerId)}
+                      className="shrink-0"
+                    />
+                    <div>
+                      <p className="font-black text-sm">{acc.name}</p>
+                      <p className="text-xs font-medium text-black/50">ID: {acc.customerId} · {acc.currencyCode}</p>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
+
           <div className="flex gap-3">
             <button
               onClick={handleSaveSelection}
@@ -325,7 +403,6 @@ export function GoogleConnectFlow({ websiteId }: GoogleConnectFlowProps) {
       </div>
 
       <div className="p-6 space-y-4">
-        {/* Account info */}
         {accountInfo?.email && (
           <div className="flex items-center gap-3 border-[2px] border-black p-3 bg-[#FFFEF0]">
             {accountInfo.picture ? (
@@ -342,7 +419,6 @@ export function GoogleConnectFlow({ websiteId }: GoogleConnectFlowProps) {
           </div>
         )}
 
-        {/* Current selections */}
         <div className="space-y-2">
           <div className="flex items-center justify-between border-[2px] border-black p-3">
             <div className="flex items-center gap-2">
@@ -376,6 +452,24 @@ export function GoogleConnectFlow({ websiteId }: GoogleConnectFlowProps) {
             ) : (
               <span className="border-[1.5px] border-black bg-[#FFE500] px-2 py-0.5 text-xs font-black">
                 NOT SELECTED
+              </span>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between border-[2px] border-black p-3">
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 border-[2px] border-black bg-[#FF8C00] flex items-center justify-center">
+                <Megaphone className="w-3 h-3 text-white" strokeWidth={3} />
+              </div>
+              <span className="font-black text-xs uppercase tracking-wider">Google Ads</span>
+            </div>
+            {accountInfo?.adsCustomerId ? (
+              <span className="border-[1.5px] border-black bg-[#FF8C00]/20 px-2 py-0.5 text-xs font-black">
+                ID: {accountInfo.adsCustomerId}
+              </span>
+            ) : (
+              <span className="border-[1.5px] border-black bg-black/10 px-2 py-0.5 text-xs font-black text-black/40">
+                NOT CONNECTED
               </span>
             )}
           </div>

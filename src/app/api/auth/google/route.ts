@@ -26,17 +26,17 @@ export async function GET(request: NextRequest) {
 
     const tokens = await exchangeCodeForTokens(code);
 
-    await saveConnection(state, 'analytics', {
+    const connData = {
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token,
       expiresAt: tokens.expiry_date,
-    });
+    };
 
-    await saveConnection(state, 'search_console', {
-      accessToken: tokens.access_token,
-      refreshToken: tokens.refresh_token,
-      expiresAt: tokens.expiry_date,
-    });
+    await Promise.all([
+      saveConnection(state, 'analytics', connData),
+      saveConnection(state, 'search_console', connData),
+      saveConnection(state, 'ads', connData),
+    ]);
 
     // Trigger background sync (fire-and-forget, don't await)
     const baseUrl = request.nextUrl.origin;
