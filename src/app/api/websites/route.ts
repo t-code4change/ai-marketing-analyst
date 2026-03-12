@@ -29,9 +29,21 @@ export async function POST(request: NextRequest) {
     const { domain, name } = await request.json();
     if (!domain) return NextResponse.json({ error: 'domain required' }, { status: 400 });
 
+    const normalizedDomain = domain.replace(/^https?:\/\//, '').replace(/\/$/, '');
+
+    const existing = await adminDb
+      .collection('websites')
+      .where('userId', '==', decoded.uid)
+      .where('domain', '==', normalizedDomain)
+      .get();
+
+    if (!existing.empty) {
+      return NextResponse.json({ error: 'Website with this domain already exists' }, { status: 409 });
+    }
+
     const ref = await adminDb.collection('websites').add({
       userId: decoded.uid,
-      domain: domain.replace(/^https?:\/\//, '').replace(/\/$/, ''),
+      domain: normalizedDomain,
       name: name || domain,
       createdAt: new Date().toISOString(),
     });
