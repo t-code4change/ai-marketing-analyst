@@ -1,0 +1,1166 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "$metadata": {
+    "name": "AI Marketing Analyst - Neo-Brutalism Design System",
+    "description": "Complete design token specification for a SaaS dashboard following the Neo-Brutalism aesthetic. Key principles: thick black borders, hard offset drop shadows (no blur), bold saturated accent colors on white/off-white backgrounds, zero border radius, heavy sans-serif typography.",
+    "version": "1.0.0",
+    "style": "Neo-Brutalism",
+    "created": "2026-03-12"
+  },
+
+  "color": {
+    "$description": "Color tokens. Neo-Brutalism uses white/off-white base, heavy black text, and 5-6 bold saturated accent colors. Borders are always #000000.",
+
+    "black": {
+      "$value": "#000000",
+      "$type": "color",
+      "$description": "Pure black. Used for borders, text, and shadows."
+    },
+    "white": {
+      "$value": "#FFFFFF",
+      "$type": "color",
+      "$description": "Pure white. Primary page background."
+    },
+
+    "accent": {
+      "$description": "The primary Neo-Brutalism accent palette. These are the bold, saturated colors that fill cards, buttons, badges, and highlights.",
+
+      "yellow": {
+        "$value": "#FFE500",
+        "$type": "color",
+        "$description": "Electric Yellow. The anchor accent — use for primary CTAs, hero highlights, and key metric cards."
+      },
+      "yellow-dark": {
+        "$value": "#D4BE00",
+        "$type": "color",
+        "$description": "Darker yellow for hover/active states on yellow surfaces."
+      },
+      "coral": {
+        "$value": "#FF6B6B",
+        "$type": "color",
+        "$description": "Hot Coral/Pink. Danger accents, warning callouts, aggressive CTA variants."
+      },
+      "coral-dark": {
+        "$value": "#E04545",
+        "$type": "color",
+        "$description": "Darker coral for hover/active states."
+      },
+      "green": {
+        "$value": "#4DFFB4",
+        "$type": "color",
+        "$description": "Electric Green. Success states, positive KPI indicators, live/active status badges."
+      },
+      "green-dark": {
+        "$value": "#00D98B",
+        "$type": "color",
+        "$description": "Darker electric green for hover/active states."
+      },
+      "blue": {
+        "$value": "#4D79FF",
+        "$type": "color",
+        "$description": "Electric Blue. Info states, links, secondary CTAs, chart accent."
+      },
+      "blue-dark": {
+        "$value": "#2255DD",
+        "$type": "color",
+        "$description": "Darker electric blue for hover/active states."
+      },
+      "orange": {
+        "$value": "#FF8C00",
+        "$type": "color",
+        "$description": "Deep Orange. Warning indicators, pending states, energy charts."
+      },
+      "orange-dark": {
+        "$value": "#CC6F00",
+        "$type": "color",
+        "$description": "Darker orange for hover/active states."
+      },
+      "purple": {
+        "$value": "#9B5DE5",
+        "$type": "color",
+        "$description": "Electric Purple. AI/ML feature highlights, premium feature badges, analytics modules."
+      },
+      "purple-dark": {
+        "$value": "#7534C4",
+        "$type": "color",
+        "$description": "Darker purple for hover/active states."
+      }
+    },
+
+    "background": {
+      "$description": "Surface and page background colors. Neo-Brutalism uses near-white or pure white — never dark mode as primary, but off-white adds texture.",
+
+      "page": {
+        "$value": "#FAFAFA",
+        "$type": "color",
+        "$description": "Default page/app background. Slightly off-white to give contrast against pure-white cards."
+      },
+      "canvas": {
+        "$value": "#FFFFFF",
+        "$type": "color",
+        "$description": "White canvas. Used for card and panel backgrounds."
+      },
+      "subtle": {
+        "$value": "#F5F5F5",
+        "$type": "color",
+        "$description": "Very light grey. Used for code blocks, table rows (zebra), muted section backgrounds."
+      },
+      "muted": {
+        "$value": "#EBEBEB",
+        "$type": "color",
+        "$description": "Light grey. Disabled states, skeleton loaders, dividers."
+      },
+      "sidebar": {
+        "$value": "#0A0A0A",
+        "$type": "color",
+        "$description": "Near-black sidebar background. Creates a stark contrast panel for navigation."
+      },
+      "sidebar-hover": {
+        "$value": "#1A1A1A",
+        "$type": "color",
+        "$description": "Slightly lighter black for sidebar item hover states."
+      },
+      "sidebar-active": {
+        "$value": "#FFE500",
+        "$type": "color",
+        "$description": "Electric Yellow for active sidebar nav item — the signature Neo-Brutalism contrast punch."
+      }
+    },
+
+    "text": {
+      "$description": "Text colors. Neo-Brutalism uses heavy black as the dominant text color.",
+
+      "primary": {
+        "$value": "#0A0A0A",
+        "$type": "color",
+        "$description": "Primary text. Near-black (not pure #000 to avoid harsh optical buzz on white)."
+      },
+      "secondary": {
+        "$value": "#3D3D3D",
+        "$type": "color",
+        "$description": "Secondary/supporting text. Dark grey for captions, labels, metadata."
+      },
+      "muted": {
+        "$value": "#737373",
+        "$type": "color",
+        "$description": "Muted text. Placeholders, disabled labels, helper text."
+      },
+      "inverse": {
+        "$value": "#FFFFFF",
+        "$type": "color",
+        "$description": "Inverse text. White text used on black/dark backgrounds (sidebar, dark cards)."
+      },
+      "on-accent": {
+        "$value": "#000000",
+        "$type": "color",
+        "$description": "Text on accent color backgrounds (yellow, green, coral, orange, blue, purple). Always black — ensures WCAG contrast."
+      },
+      "on-sidebar-active": {
+        "$value": "#000000",
+        "$type": "color",
+        "$description": "Black text on the electric yellow active sidebar item."
+      },
+      "link": {
+        "$value": "#4D79FF",
+        "$type": "color",
+        "$description": "Link color. Electric blue."
+      },
+      "link-hover": {
+        "$value": "#2255DD",
+        "$type": "color",
+        "$description": "Link hover color."
+      }
+    },
+
+    "border": {
+      "$description": "Border colors. In Neo-Brutalism, borders are ALWAYS black. There is no concept of a subtle or coloured border — the thick black border IS the design element.",
+
+      "default": {
+        "$value": "#000000",
+        "$type": "color",
+        "$description": "The one and only border color. All UI elements use this."
+      },
+      "focus": {
+        "$value": "#4D79FF",
+        "$type": "color",
+        "$description": "Focus ring color only — used for keyboard accessibility outlines."
+      }
+    },
+
+    "semantic": {
+      "$description": "Semantic status colors. These map to the accent palette for consistency.",
+
+      "success": {
+        "base": {
+          "$value": "#4DFFB4",
+          "$type": "color",
+          "$description": "Electric Green. Success states, positive trends."
+        },
+        "text": {
+          "$value": "#006644",
+          "$type": "color",
+          "$description": "Dark green for text in success contexts."
+        },
+        "bg": {
+          "$value": "#4DFFB4",
+          "$type": "color",
+          "$description": "Success badge/alert background."
+        }
+      },
+      "warning": {
+        "base": {
+          "$value": "#FF8C00",
+          "$type": "color",
+          "$description": "Orange. Warning states."
+        },
+        "text": {
+          "$value": "#7A3E00",
+          "$type": "color",
+          "$description": "Dark orange-brown for text in warning contexts."
+        },
+        "bg": {
+          "$value": "#FF8C00",
+          "$type": "color",
+          "$description": "Warning badge/alert background."
+        }
+      },
+      "error": {
+        "base": {
+          "$value": "#FF6B6B",
+          "$type": "color",
+          "$description": "Coral Red. Error states."
+        },
+        "text": {
+          "$value": "#7A0000",
+          "$type": "color",
+          "$description": "Dark red for text in error contexts."
+        },
+        "bg": {
+          "$value": "#FF6B6B",
+          "$type": "color",
+          "$description": "Error badge/alert background."
+        }
+      },
+      "info": {
+        "base": {
+          "$value": "#4D79FF",
+          "$type": "color",
+          "$description": "Electric Blue. Informational states."
+        },
+        "text": {
+          "$value": "#00217A",
+          "$type": "color",
+          "$description": "Dark blue for text in info contexts."
+        },
+        "bg": {
+          "$value": "#4D79FF",
+          "$type": "color",
+          "$description": "Info badge/alert background."
+        }
+      },
+      "neutral": {
+        "base": {
+          "$value": "#EBEBEB",
+          "$type": "color",
+          "$description": "Neutral/default badge state."
+        },
+        "text": {
+          "$value": "#0A0A0A",
+          "$type": "color",
+          "$description": "Black text on neutral backgrounds."
+        },
+        "bg": {
+          "$value": "#EBEBEB",
+          "$type": "color",
+          "$description": "Neutral badge/tag background."
+        }
+      }
+    },
+
+    "chart": {
+      "$description": "Chart and data visualization accent sequence. Use in order for multi-series charts.",
+      "1": { "$value": "#FFE500", "$type": "color", "$description": "Electric Yellow — series 1." },
+      "2": { "$value": "#4D79FF", "$type": "color", "$description": "Electric Blue — series 2." },
+      "3": { "$value": "#FF6B6B", "$type": "color", "$description": "Coral Red — series 3." },
+      "4": { "$value": "#4DFFB4", "$type": "color", "$description": "Electric Green — series 4." },
+      "5": { "$value": "#FF8C00", "$type": "color", "$description": "Orange — series 5." },
+      "6": { "$value": "#9B5DE5", "$type": "color", "$description": "Purple — series 6." }
+    }
+  },
+
+  "typography": {
+    "$description": "Typography tokens. Neo-Brutalism demands heavy, geometric sans-serifs for display text. Monospace for data/code. All weights lean heavy.",
+
+    "fontFamily": {
+      "display": {
+        "$value": "'Syne', 'Space Grotesk', sans-serif",
+        "$type": "fontFamily",
+        "$description": "Display/heading font. Syne Extra (weight 800) is built for large, impactful titles. Its wide, heavy letterforms are quintessentially Neo-Brutalist. Fallback to Space Grotesk."
+      },
+      "body": {
+        "$value": "'Space Grotesk', 'Inter', sans-serif",
+        "$type": "fontFamily",
+        "$description": "Body and UI font. Space Grotesk is a geometric grotesque with slight quirks that gives Neo-Brutalist interfaces their character. Available in 300–700. Fallback to Inter."
+      },
+      "mono": {
+        "$value": "'DM Mono', 'Space Mono', 'Fira Code', monospace",
+        "$type": "fontFamily",
+        "$description": "Monospace font. Used for data values, metrics, code snippets, stat numbers, and API output. DM Mono is clean and minimal — it doesn't compete with the bold display text."
+      },
+      "accent": {
+        "$value": "'Syne', sans-serif",
+        "$type": "fontFamily",
+        "$description": "Optional accent font variant for section labels, overlines, and eyebrow text — typically set in uppercase with wide letter spacing."
+      }
+    },
+
+    "googleFontsImport": {
+      "$value": "https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap",
+      "$type": "string",
+      "$description": "Google Fonts import URL. Place in <link> tag or @import in globals.css."
+    },
+
+    "fontSize": {
+      "$description": "Type scale based on a 1.25 modular scale (Major Third) anchored at 16px base. Sizes in rem.",
+      "2xs": {
+        "$value": "0.625rem",
+        "$type": "dimension",
+        "$description": "10px. Micro labels, chart axis ticks, legal fine print."
+      },
+      "xs": {
+        "$value": "0.75rem",
+        "$type": "dimension",
+        "$description": "12px. Captions, helper text, timestamps, badge labels."
+      },
+      "sm": {
+        "$value": "0.875rem",
+        "$type": "dimension",
+        "$description": "14px. Secondary body text, table cells, input labels."
+      },
+      "base": {
+        "$value": "1rem",
+        "$type": "dimension",
+        "$description": "16px. Primary body copy, button text, navigation items."
+      },
+      "lg": {
+        "$value": "1.125rem",
+        "$type": "dimension",
+        "$description": "18px. Lead paragraph text, card section headers."
+      },
+      "xl": {
+        "$value": "1.25rem",
+        "$type": "dimension",
+        "$description": "20px. Subsection headings, panel titles."
+      },
+      "2xl": {
+        "$value": "1.5rem",
+        "$type": "dimension",
+        "$description": "24px. Section headings (H3-equivalent)."
+      },
+      "3xl": {
+        "$value": "1.875rem",
+        "$type": "dimension",
+        "$description": "30px. Page section titles (H2-equivalent)."
+      },
+      "4xl": {
+        "$value": "2.25rem",
+        "$type": "dimension",
+        "$description": "36px. Dashboard page title (H1-equivalent)."
+      },
+      "5xl": {
+        "$value": "3rem",
+        "$type": "dimension",
+        "$description": "48px. Hero headlines, marketing page display text."
+      },
+      "6xl": {
+        "$value": "3.75rem",
+        "$type": "dimension",
+        "$description": "60px. Extra-large display, landing page hero numbers."
+      },
+      "7xl": {
+        "$value": "4.5rem",
+        "$type": "dimension",
+        "$description": "72px. Mega display. Syne 800 at this size is unmistakably Neo-Brutalist."
+      }
+    },
+
+    "fontWeight": {
+      "$description": "Font weights. Neo-Brutalism skews heavy — 700 and 800 dominate. Light weights are used sparingly for contrast.",
+      "light": {
+        "$value": 300,
+        "$type": "fontWeight",
+        "$description": "300. Used only for large display text to create weight contrast within a headline."
+      },
+      "regular": {
+        "$value": 400,
+        "$type": "fontWeight",
+        "$description": "400. Body copy, table data, secondary descriptive text."
+      },
+      "medium": {
+        "$value": 500,
+        "$type": "fontWeight",
+        "$description": "500. Navigation items, input labels, minor headings."
+      },
+      "semibold": {
+        "$value": 600,
+        "$type": "fontWeight",
+        "$description": "600. Card titles, button text, badge text."
+      },
+      "bold": {
+        "$value": 700,
+        "$type": "fontWeight",
+        "$description": "700. Primary headings, stat values, CTA buttons. The workhorse weight."
+      },
+      "extrabold": {
+        "$value": 800,
+        "$type": "fontWeight",
+        "$description": "800. Display headlines, hero numbers, Syne section titles. The Neo-Brutalism signature weight."
+      }
+    },
+
+    "lineHeight": {
+      "$description": "Line heights. Tighter leading for display text, comfortable for body.",
+      "none": {
+        "$value": 1,
+        "$type": "number",
+        "$description": "1.0. Single-line display elements like KPI numbers."
+      },
+      "tight": {
+        "$value": 1.15,
+        "$type": "number",
+        "$description": "1.15. Hero headlines and display titles."
+      },
+      "snug": {
+        "$value": 1.3,
+        "$type": "number",
+        "$description": "1.3. Section headings, card titles."
+      },
+      "normal": {
+        "$value": 1.5,
+        "$type": "number",
+        "$description": "1.5. Body copy standard."
+      },
+      "relaxed": {
+        "$value": 1.625,
+        "$type": "number",
+        "$description": "1.625. Long-form readable body text."
+      },
+      "loose": {
+        "$value": 2,
+        "$type": "number",
+        "$description": "2.0. Spaced-out UI labels."
+      }
+    },
+
+    "letterSpacing": {
+      "$description": "Letter spacing. Display text is tightly tracked; uppercase labels are wide-tracked.",
+      "tighter": {
+        "$value": "-0.05em",
+        "$type": "dimension",
+        "$description": "Negative tracking for large display/Syne headlines — creates the dense, heavy Neo-Brutalist look."
+      },
+      "tight": {
+        "$value": "-0.025em",
+        "$type": "dimension",
+        "$description": "Slight negative tracking for H1-H2 headings."
+      },
+      "normal": {
+        "$value": "0em",
+        "$type": "dimension",
+        "$description": "Default tracking for body text."
+      },
+      "wide": {
+        "$value": "0.05em",
+        "$type": "dimension",
+        "$description": "Slightly wide. Navigation items, button text."
+      },
+      "wider": {
+        "$value": "0.1em",
+        "$type": "dimension",
+        "$description": "Wide tracking. Overline/eyebrow labels (UPPERCASE SECTION LABELS)."
+      },
+      "widest": {
+        "$value": "0.2em",
+        "$type": "dimension",
+        "$description": "Very wide. Badge text in uppercase, status indicators."
+      }
+    }
+  },
+
+  "border": {
+    "$description": "Border tokens. Thick black borders are the most defining visual feature of Neo-Brutalism. The border IS the design.",
+
+    "width": {
+      "hairline": {
+        "$value": "1px",
+        "$type": "dimension",
+        "$description": "1px. Subtle dividers within components (e.g., table rows). Use sparingly."
+      },
+      "thin": {
+        "$value": "1.5px",
+        "$type": "dimension",
+        "$description": "1.5px. Inner/decorative separators."
+      },
+      "default": {
+        "$value": "2px",
+        "$type": "dimension",
+        "$description": "2px. The standard Neo-Brutalism border. All interactive elements use this as a minimum."
+      },
+      "medium": {
+        "$value": "3px",
+        "$type": "dimension",
+        "$description": "3px. Card borders, panel borders, prominent containers."
+      },
+      "thick": {
+        "$value": "4px",
+        "$type": "dimension",
+        "$description": "4px. Primary action buttons, featured cards, hero elements."
+      },
+      "heavy": {
+        "$value": "6px",
+        "$type": "dimension",
+        "$description": "6px. Structural page elements, sidebar border-right, modal frames."
+      }
+    },
+
+    "radius": {
+      "$description": "Border radius values. Neo-Brutalism uses SHARP CORNERS. Radius is zero or near-zero. This is non-negotiable.",
+      "none": {
+        "$value": "0px",
+        "$type": "dimension",
+        "$description": "The default. All standard components: cards, buttons, inputs, modals, dropdowns. Zero radius."
+      },
+      "xs": {
+        "$value": "2px",
+        "$type": "dimension",
+        "$description": "2px. The absolute maximum allowed radius. Only for tiny elements like checkboxes or small chips where zero looks technically broken."
+      }
+    },
+
+    "color": {
+      "default": {
+        "$value": "#000000",
+        "$type": "color",
+        "$description": "Pure black. The only border color in Neo-Brutalism."
+      }
+    },
+
+    "style": {
+      "default": {
+        "$value": "solid",
+        "$type": "string",
+        "$description": "All borders are solid. No dashed or dotted borders."
+      }
+    }
+  },
+
+  "shadow": {
+    "$description": "Box shadow tokens. The hard offset shadow (no blur radius, no spread) is THE signature of Neo-Brutalism. It creates a 3D lifted effect that makes every element feel like a physical object on a flat surface. Hover and active states animate the shadow.",
+
+    "none": {
+      "$value": "none",
+      "$type": "shadow",
+      "$description": "No shadow. Used for active/pressed state (element appears pushed down)."
+    },
+    "xs": {
+      "$value": "2px 2px 0px 0px #000000",
+      "$type": "shadow",
+      "$description": "Extra-small offset. Subtle lift for small components: badges, chips, small buttons."
+    },
+    "sm": {
+      "$value": "3px 3px 0px 0px #000000",
+      "$type": "shadow",
+      "$description": "Small offset. Default for interactive small elements: icon buttons, small cards."
+    },
+    "md": {
+      "$value": "4px 4px 0px 0px #000000",
+      "$type": "shadow",
+      "$description": "Medium offset. Standard for buttons and input fields — the most common shadow."
+    },
+    "lg": {
+      "$value": "6px 6px 0px 0px #000000",
+      "$type": "shadow",
+      "$description": "Large offset. Standard for cards and panels — creates clear visual elevation."
+    },
+    "xl": {
+      "$value": "8px 8px 0px 0px #000000",
+      "$type": "shadow",
+      "$description": "Extra-large offset. Featured/hero cards, primary CTA, modal dialogs."
+    },
+    "2xl": {
+      "$value": "12px 12px 0px 0px #000000",
+      "$type": "shadow",
+      "$description": "2XL offset. Maximum emphasis. Landing page hero cards, premium feature showcases."
+    },
+    "hover-sm": {
+      "$value": "5px 5px 0px 0px #000000",
+      "$type": "shadow",
+      "$description": "Hover state shadow for xs/sm elements. Shadow grows as element translates -2px/-2px."
+    },
+    "hover-md": {
+      "$value": "6px 6px 0px 0px #000000",
+      "$type": "shadow",
+      "$description": "Hover state shadow for md elements."
+    },
+    "hover-lg": {
+      "$value": "8px 8px 0px 0px #000000",
+      "$type": "shadow",
+      "$description": "Hover state shadow for lg elements."
+    },
+    "hover-xl": {
+      "$value": "10px 10px 0px 0px #000000",
+      "$type": "shadow",
+      "$description": "Hover state shadow for xl elements."
+    },
+    "inset": {
+      "$value": "inset 3px 3px 0px 0px #000000",
+      "$type": "shadow",
+      "$description": "Inset shadow for active/pressed state. Replaces offset shadow when element is clicked — gives the illusion of being pressed into the surface."
+    }
+  },
+
+  "spacing": {
+    "$description": "Spacing scale based on a 4px base unit. All spacing values are multiples of 4px. This strict grid is standard for all padding, margin, and gap values.",
+    "0": { "$value": "0px", "$type": "dimension" },
+    "px": { "$value": "1px", "$type": "dimension", "$description": "1px. Border-only adjustments." },
+    "0.5": { "$value": "2px", "$type": "dimension" },
+    "1": { "$value": "4px", "$type": "dimension", "$description": "4px. Minimum interactive gap." },
+    "1.5": { "$value": "6px", "$type": "dimension" },
+    "2": { "$value": "8px", "$type": "dimension" },
+    "2.5": { "$value": "10px", "$type": "dimension" },
+    "3": { "$value": "12px", "$type": "dimension" },
+    "3.5": { "$value": "14px", "$type": "dimension" },
+    "4": { "$value": "16px", "$type": "dimension", "$description": "16px. Default component inner padding." },
+    "5": { "$value": "20px", "$type": "dimension" },
+    "6": { "$value": "24px", "$type": "dimension", "$description": "24px. Card padding, section gaps." },
+    "7": { "$value": "28px", "$type": "dimension" },
+    "8": { "$value": "32px", "$type": "dimension", "$description": "32px. Large section padding." },
+    "9": { "$value": "36px", "$type": "dimension" },
+    "10": { "$value": "40px", "$type": "dimension" },
+    "11": { "$value": "44px", "$type": "dimension" },
+    "12": { "$value": "48px", "$type": "dimension" },
+    "14": { "$value": "56px", "$type": "dimension" },
+    "16": { "$value": "64px", "$type": "dimension" },
+    "20": { "$value": "80px", "$type": "dimension" },
+    "24": { "$value": "96px", "$type": "dimension" },
+    "28": { "$value": "112px", "$type": "dimension" },
+    "32": { "$value": "128px", "$type": "dimension" }
+  },
+
+  "interaction": {
+    "$description": "Interaction state tokens. The translate+shadow animation is the most distinctive interactive behavior in Neo-Brutalism — elements physically lift and drop.",
+
+    "transition": {
+      "fast": {
+        "$value": "100ms ease-out",
+        "$type": "string",
+        "$description": "Fast transition. Used for active/pressed states — snappy, immediate response."
+      },
+      "default": {
+        "$value": "150ms ease-out",
+        "$type": "string",
+        "$description": "Default transition. Used for hover states — quick but perceptible."
+      },
+      "slow": {
+        "$value": "200ms ease-in-out",
+        "$type": "string",
+        "$description": "Slow transition. Page transitions, modal entry animations."
+      },
+      "properties": {
+        "$value": "transform, box-shadow",
+        "$type": "string",
+        "$description": "IMPORTANT: Only transition transform and box-shadow. Never transition background-color — Neo-Brutalism uses solid fills with no gradients or fades."
+      }
+    },
+
+    "hover": {
+      "translateX": {
+        "$value": "-2px",
+        "$type": "dimension",
+        "$description": "On hover: translate the element -2px left. Combined with shadow growth, creates a physical lift effect."
+      },
+      "translateY": {
+        "$value": "-2px",
+        "$type": "dimension",
+        "$description": "On hover: translate the element -2px up."
+      },
+      "transform": {
+        "$value": "translate(-2px, -2px)",
+        "$type": "string",
+        "$description": "Full hover transform shorthand."
+      },
+      "shadowGrowth": {
+        "$value": "+2px on each shadow offset axis",
+        "$type": "string",
+        "$description": "Shadow grows by 2px on each axis during hover. Example: md (4px 4px) becomes hover-md (6px 6px). The element moves toward top-left while shadow expands bottom-right — creating a floating-above-surface illusion."
+      }
+    },
+
+    "active": {
+      "translateX": {
+        "$value": "2px",
+        "$type": "dimension",
+        "$description": "On active/pressed: translate the element +2px right (into the shadow). Reverses the hover lift."
+      },
+      "translateY": {
+        "$value": "2px",
+        "$type": "dimension",
+        "$description": "On active/pressed: translate the element +2px down."
+      },
+      "transform": {
+        "$value": "translate(2px, 2px)",
+        "$type": "string",
+        "$description": "Full active transform shorthand."
+      },
+      "shadow": {
+        "$value": "none",
+        "$type": "string",
+        "$description": "On active/pressed: shadow collapses to none. Combined with the translate(2px, 2px), the element appears to merge with its shadow — fully pressed into the surface."
+      }
+    },
+
+    "focus": {
+      "outline": {
+        "$value": "2px solid #4D79FF",
+        "$type": "string",
+        "$description": "Keyboard focus outline. Electric Blue — visible but distinct from the black border system."
+      },
+      "outlineOffset": {
+        "$value": "2px",
+        "$type": "dimension",
+        "$description": "Focus outline offset. Sits outside the black border."
+      }
+    },
+
+    "disabled": {
+      "opacity": {
+        "$value": "0.45",
+        "$type": "number",
+        "$description": "Disabled state opacity. Reduces to ~45% to clearly indicate non-interactive state."
+      },
+      "cursor": {
+        "$value": "not-allowed",
+        "$type": "string"
+      },
+      "transform": {
+        "$value": "none",
+        "$type": "string",
+        "$description": "Disabled elements do not lift or animate."
+      }
+    }
+  },
+
+  "component": {
+    "$description": "Component-level design tokens. These compose the primitive tokens above into specific UI patterns.",
+
+    "card": {
+      "$description": "Card component tokens. Cards are the primary content containers in the dashboard. They use solid accent background OR white, always with a thick black border and hard offset shadow.",
+
+      "background": {
+        "default": { "$value": "{color.background.canvas}", "$description": "Default card: white background." },
+        "yellow": { "$value": "{color.accent.yellow}", "$description": "Accent card: electric yellow fill." },
+        "coral": { "$value": "{color.accent.coral}", "$description": "Accent card: coral fill." },
+        "green": { "$value": "{color.accent.green}", "$description": "Accent card: electric green fill." },
+        "blue": { "$value": "{color.accent.blue}", "$description": "Accent card: electric blue fill." },
+        "orange": { "$value": "{color.accent.orange}", "$description": "Accent card: orange fill." },
+        "purple": { "$value": "{color.accent.purple}", "$description": "Accent card: purple fill." },
+        "black": { "$value": "{color.black}", "$description": "Inverted card: black fill with white text." }
+      },
+      "border": {
+        "width": { "$value": "{border.width.medium}", "$description": "3px border on cards." },
+        "color": { "$value": "{border.color.default}", "$description": "Black border." },
+        "radius": { "$value": "{border.radius.none}", "$description": "Zero radius — sharp corners." }
+      },
+      "shadow": {
+        "default": { "$value": "{shadow.lg}", "$description": "6px 6px 0px #000. Default card elevation." },
+        "featured": { "$value": "{shadow.xl}", "$description": "8px 8px 0px #000. For KPI/hero metric cards." }
+      },
+      "padding": {
+        "sm": { "$value": "{spacing.4}", "$description": "16px. Compact card padding." },
+        "default": { "$value": "{spacing.6}", "$description": "24px. Standard card padding." },
+        "lg": { "$value": "{spacing.8}", "$description": "32px. Large/featured card padding." }
+      },
+      "hover": {
+        "transform": { "$value": "{interaction.hover.transform}" },
+        "shadow": { "$value": "{shadow.hover-lg}", "$description": "Shadow grows from 6px to 8px on hover." }
+      }
+    },
+
+    "button": {
+      "$description": "Button component tokens. Buttons are thick-bordered, offset-shadowed, bold-text UI elements. They physically animate on hover and active.",
+
+      "primary": {
+        "$description": "Primary CTA button. Electric yellow fill, black border, black text.",
+        "background": { "$value": "{color.accent.yellow}" },
+        "backgroundHover": { "$value": "{color.accent.yellow-dark}" },
+        "text": { "$value": "{color.text.on-accent}" },
+        "border": { "$value": "2px solid #000000", "$description": "Thick solid black border." },
+        "shadow": { "$value": "{shadow.md}", "$description": "4px 4px 0px #000." },
+        "shadowHover": { "$value": "{shadow.hover-md}", "$description": "6px 6px 0px #000." },
+        "fontWeight": { "$value": "{typography.fontWeight.bold}" },
+        "letterSpacing": { "$value": "{typography.letterSpacing.wide}" },
+        "textTransform": { "$value": "uppercase", "$description": "Primary buttons use uppercase text — a Neo-Brutalism convention." },
+        "paddingX": { "$value": "{spacing.6}" },
+        "paddingY": { "$value": "{spacing.3}" },
+        "radius": { "$value": "{border.radius.none}" }
+      },
+
+      "secondary": {
+        "$description": "Secondary button. White fill, black border, black text.",
+        "background": { "$value": "{color.background.canvas}" },
+        "backgroundHover": { "$value": "{color.background.subtle}" },
+        "text": { "$value": "{color.text.primary}" },
+        "border": { "$value": "2px solid #000000" },
+        "shadow": { "$value": "{shadow.md}" },
+        "shadowHover": { "$value": "{shadow.hover-md}" },
+        "fontWeight": { "$value": "{typography.fontWeight.semibold}" },
+        "letterSpacing": { "$value": "{typography.letterSpacing.wide}" },
+        "textTransform": { "$value": "uppercase" },
+        "paddingX": { "$value": "{spacing.6}" },
+        "paddingY": { "$value": "{spacing.3}" },
+        "radius": { "$value": "{border.radius.none}" }
+      },
+
+      "ghost": {
+        "$description": "Ghost/text button. No fill, no shadow. Border appears on hover only.",
+        "background": { "$value": "transparent" },
+        "backgroundHover": { "$value": "{color.background.subtle}" },
+        "text": { "$value": "{color.text.primary}" },
+        "border": { "$value": "2px solid transparent" },
+        "borderHover": { "$value": "2px solid #000000" },
+        "shadow": { "$value": "none" },
+        "shadowHover": { "$value": "{shadow.sm}" },
+        "fontWeight": { "$value": "{typography.fontWeight.medium}" },
+        "paddingX": { "$value": "{spacing.4}" },
+        "paddingY": { "$value": "{spacing.2.5}" },
+        "radius": { "$value": "{border.radius.none}" }
+      },
+
+      "destructive": {
+        "$description": "Destructive action button. Coral red fill.",
+        "background": { "$value": "{color.accent.coral}" },
+        "backgroundHover": { "$value": "{color.accent.coral-dark}" },
+        "text": { "$value": "{color.text.on-accent}" },
+        "border": { "$value": "2px solid #000000" },
+        "shadow": { "$value": "{shadow.md}" },
+        "shadowHover": { "$value": "{shadow.hover-md}" },
+        "fontWeight": { "$value": "{typography.fontWeight.bold}" },
+        "textTransform": { "$value": "uppercase" },
+        "paddingX": { "$value": "{spacing.6}" },
+        "paddingY": { "$value": "{spacing.3}" },
+        "radius": { "$value": "{border.radius.none}" }
+      },
+
+      "size": {
+        "xs": { "paddingX": "{spacing.3}", "paddingY": "{spacing.1.5}", "fontSize": "{typography.fontSize.xs}" },
+        "sm": { "paddingX": "{spacing.4}", "paddingY": "{spacing.2}", "fontSize": "{typography.fontSize.sm}" },
+        "md": { "paddingX": "{spacing.6}", "paddingY": "{spacing.3}", "fontSize": "{typography.fontSize.base}" },
+        "lg": { "paddingX": "{spacing.8}", "paddingY": "{spacing.4}", "fontSize": "{typography.fontSize.lg}" },
+        "xl": { "paddingX": "{spacing.10}", "paddingY": "{spacing.5}", "fontSize": "{typography.fontSize.xl}" }
+      }
+    },
+
+    "input": {
+      "$description": "Input/form field tokens. Inputs in Neo-Brutalism are stark — thick black border, zero radius, high contrast.",
+
+      "background": { "$value": "{color.background.canvas}", "$description": "White input background." },
+      "backgroundFocus": { "$value": "{color.background.canvas}", "$description": "Background does not change on focus." },
+      "border": { "$value": "2px solid #000000" },
+      "borderFocus": { "$value": "2px solid #000000", "$description": "Border stays black on focus — the blue focus ring provides the focus indicator." },
+      "radius": { "$value": "{border.radius.none}" },
+      "shadow": { "$value": "{shadow.sm}", "$description": "3px 3px 0px #000. Inputs have a small offset shadow." },
+      "shadowFocus": { "$value": "{shadow.md}", "$description": "Shadow grows on focus to indicate engagement." },
+      "paddingX": { "$value": "{spacing.4}" },
+      "paddingY": { "$value": "{spacing.3}" },
+      "fontSize": { "$value": "{typography.fontSize.base}" },
+      "fontWeight": { "$value": "{typography.fontWeight.medium}" },
+      "color": { "$value": "{color.text.primary}" },
+      "placeholder": { "$value": "{color.text.muted}" },
+      "focusRing": { "$value": "{interaction.focus.outline}" },
+      "focusRingOffset": { "$value": "{interaction.focus.outlineOffset}" },
+      "label": {
+        "fontSize": { "$value": "{typography.fontSize.sm}" },
+        "fontWeight": { "$value": "{typography.fontWeight.bold}" },
+        "color": { "$value": "{color.text.primary}" },
+        "textTransform": { "$value": "uppercase" },
+        "letterSpacing": { "$value": "{typography.letterSpacing.wider}" },
+        "marginBottom": { "$value": "{spacing.2}" }
+      },
+      "error": {
+        "border": { "$value": "2px solid #FF6B6B" },
+        "message": { "color": "{color.semantic.error.text}", "fontSize": "{typography.fontSize.xs}" }
+      }
+    },
+
+    "badge": {
+      "$description": "Badge and tag component tokens. Badges in Neo-Brutalism are solid-filled, thick-bordered, uppercase labels.",
+
+      "border": { "$value": "2px solid #000000" },
+      "radius": { "$value": "{border.radius.none}" },
+      "fontWeight": { "$value": "{typography.fontWeight.bold}" },
+      "fontSize": { "$value": "{typography.fontSize.xs}" },
+      "textTransform": { "$value": "uppercase" },
+      "letterSpacing": { "$value": "{typography.letterSpacing.widest}" },
+      "paddingX": { "$value": "{spacing.2}" },
+      "paddingY": { "$value": "{spacing.0.5}" },
+      "shadow": { "$value": "{shadow.xs}", "$description": "2px 2px 0px #000. Badges have a micro shadow." },
+
+      "variants": {
+        "success": {
+          "background": { "$value": "{color.accent.green}" },
+          "color": { "$value": "{color.text.on-accent}" }
+        },
+        "warning": {
+          "background": { "$value": "{color.accent.orange}" },
+          "color": { "$value": "{color.text.on-accent}" }
+        },
+        "error": {
+          "background": { "$value": "{color.accent.coral}" },
+          "color": { "$value": "{color.text.on-accent}" }
+        },
+        "info": {
+          "background": { "$value": "{color.accent.blue}" },
+          "color": { "$value": "{color.text.inverse}" }
+        },
+        "primary": {
+          "background": { "$value": "{color.accent.yellow}" },
+          "color": { "$value": "{color.text.on-accent}" }
+        },
+        "purple": {
+          "background": { "$value": "{color.accent.purple}" },
+          "color": { "$value": "{color.text.inverse}" }
+        },
+        "neutral": {
+          "background": { "$value": "{color.background.muted}" },
+          "color": { "$value": "{color.text.primary}" }
+        },
+        "outline": {
+          "background": { "$value": "transparent" },
+          "color": { "$value": "{color.text.primary}" }
+        }
+      }
+    },
+
+    "sidebar": {
+      "$description": "Left navigation sidebar tokens. The sidebar is the structural anchor of the dashboard. Uses near-black background for stark contrast against the white main content area.",
+
+      "background": { "$value": "{color.background.sidebar}", "$description": "#0A0A0A near-black." },
+      "borderRight": { "$value": "3px solid #000000" },
+      "width": { "$value": "256px", "$description": "16rem. Standard sidebar width." },
+      "widthCollapsed": { "$value": "64px", "$description": "4rem. Icon-only collapsed state." },
+      "paddingX": { "$value": "{spacing.4}" },
+      "paddingY": { "$value": "{spacing.4}" },
+
+      "logo": {
+        "paddingX": { "$value": "{spacing.4}" },
+        "paddingY": { "$value": "{spacing.5}" },
+        "borderBottom": { "$value": "2px solid #2A2A2A" },
+        "fontFamily": { "$value": "{typography.fontFamily.display}" },
+        "fontSize": { "$value": "{typography.fontSize.xl}" },
+        "fontWeight": { "$value": "{typography.fontWeight.extrabold}" },
+        "color": { "$value": "{color.text.inverse}" }
+      },
+
+      "navItem": {
+        "default": {
+          "background": { "$value": "transparent" },
+          "color": { "$value": "#A3A3A3", "$description": "Mid-grey text for inactive nav items." },
+          "fontWeight": { "$value": "{typography.fontWeight.medium}" },
+          "fontSize": { "$value": "{typography.fontSize.sm}" },
+          "paddingX": { "$value": "{spacing.3}" },
+          "paddingY": { "$value": "{spacing.2.5}" },
+          "radius": { "$value": "{border.radius.none}" },
+          "border": { "$value": "2px solid transparent" }
+        },
+        "hover": {
+          "background": { "$value": "{color.background.sidebar-hover}" },
+          "color": { "$value": "{color.text.inverse}" },
+          "border": { "$value": "2px solid #3A3A3A" }
+        },
+        "active": {
+          "background": { "$value": "{color.background.sidebar-active}", "$description": "Electric Yellow #FFE500." },
+          "color": { "$value": "{color.text.on-sidebar-active}", "$description": "Black text on yellow." },
+          "fontWeight": { "$value": "{typography.fontWeight.bold}" },
+          "border": { "$value": "2px solid #000000" },
+          "shadow": { "$value": "3px 3px 0px 0px #000000" }
+        }
+      },
+
+      "section": {
+        "labelColor": { "$value": "#4A4A4A" },
+        "labelFontSize": { "$value": "{typography.fontSize.2xs}" },
+        "labelFontWeight": { "$value": "{typography.fontWeight.bold}" },
+        "labelTextTransform": { "$value": "uppercase" },
+        "labelLetterSpacing": { "$value": "{typography.letterSpacing.widest}" },
+        "labelPaddingX": { "$value": "{spacing.3}" },
+        "labelPaddingY": { "$value": "{spacing.3}" },
+        "borderTop": { "$value": "1px solid #2A2A2A" }
+      }
+    },
+
+    "topbar": {
+      "$description": "Top navigation bar / header tokens.",
+      "background": { "$value": "{color.background.canvas}" },
+      "borderBottom": { "$value": "3px solid #000000" },
+      "height": { "$value": "64px" },
+      "paddingX": { "$value": "{spacing.6}" },
+      "shadow": { "$value": "0px 3px 0px 0px #000000", "$description": "Bottom-only offset shadow for the header bar." }
+    },
+
+    "table": {
+      "$description": "Data table component tokens. Tables in Neo-Brutalism are grid-like and structured.",
+      "borderCollapse": { "$value": "collapse" },
+      "border": { "$value": "2px solid #000000" },
+      "headerBackground": { "$value": "{color.black}" },
+      "headerColor": { "$value": "{color.text.inverse}" },
+      "headerFontWeight": { "$value": "{typography.fontWeight.bold}" },
+      "headerFontSize": { "$value": "{typography.fontSize.xs}" },
+      "headerTextTransform": { "$value": "uppercase" },
+      "headerLetterSpacing": { "$value": "{typography.letterSpacing.wider}" },
+      "headerPaddingX": { "$value": "{spacing.4}" },
+      "headerPaddingY": { "$value": "{spacing.3}" },
+      "cellBorder": { "$value": "1px solid #000000" },
+      "cellPaddingX": { "$value": "{spacing.4}" },
+      "cellPaddingY": { "$value": "{spacing.3}" },
+      "rowOdd": { "$value": "{color.background.canvas}" },
+      "rowEven": { "$value": "{color.background.subtle}" },
+      "rowHover": { "$value": "{color.accent.yellow}", "$description": "Yellow highlight on row hover — bold Neo-Brutalism table interaction." }
+    },
+
+    "modal": {
+      "$description": "Modal/dialog overlay tokens.",
+      "background": { "$value": "{color.background.canvas}" },
+      "border": { "$value": "3px solid #000000" },
+      "radius": { "$value": "{border.radius.none}" },
+      "shadow": { "$value": "{shadow.2xl}", "$description": "12px 12px 0px #000 — modals must feel elevated and commanding." },
+      "overlay": { "$value": "rgba(0, 0, 0, 0.75)" },
+      "paddingX": { "$value": "{spacing.8}" },
+      "paddingY": { "$value": "{spacing.8}" },
+      "maxWidth": {
+        "sm": { "$value": "400px" },
+        "md": { "$value": "560px" },
+        "lg": { "$value": "720px" },
+        "xl": { "$value": "960px" }
+      }
+    },
+
+    "tooltip": {
+      "$description": "Tooltip tokens.",
+      "background": { "$value": "{color.black}" },
+      "color": { "$value": "{color.text.inverse}" },
+      "border": { "$value": "1.5px solid #000000" },
+      "radius": { "$value": "{border.radius.none}" },
+      "shadow": { "$value": "{shadow.xs}" },
+      "paddingX": { "$value": "{spacing.3}" },
+      "paddingY": { "$value": "{spacing.1.5}" },
+      "fontSize": { "$value": "{typography.fontSize.xs}" },
+      "fontWeight": { "$value": "{typography.fontWeight.medium}" }
+    },
+
+    "select": {
+      "$description": "Select / dropdown tokens.",
+      "background": { "$value": "{color.background.canvas}" },
+      "border": { "$value": "2px solid #000000" },
+      "radius": { "$value": "{border.radius.none}" },
+      "shadow": { "$value": "{shadow.sm}" },
+      "paddingX": { "$value": "{spacing.4}" },
+      "paddingY": { "$value": "{spacing.3}" },
+      "fontSize": { "$value": "{typography.fontSize.base}" },
+      "fontWeight": { "$value": "{typography.fontWeight.medium}" },
+      "dropdownBackground": { "$value": "{color.background.canvas}" },
+      "dropdownBorder": { "$value": "2px solid #000000" },
+      "dropdownShadow": { "$value": "{shadow.lg}" },
+      "optionHoverBackground": { "$value": "{color.accent.yellow}" }
+    },
+
+    "kpiCard": {
+      "$description": "KPI metric card — the primary data display card in an analytics dashboard.",
+      "background": { "$value": "{color.background.canvas}" },
+      "border": { "$value": "3px solid #000000" },
+      "radius": { "$value": "{border.radius.none}" },
+      "shadow": { "$value": "{shadow.xl}", "$description": "8px 8px 0px #000 — KPI cards have maximum elevation." },
+      "padding": { "$value": "{spacing.6}" },
+      "valueFont": { "$value": "{typography.fontFamily.mono}" },
+      "valueFontSize": { "$value": "{typography.fontSize.4xl}" },
+      "valueFontWeight": { "$value": "{typography.fontWeight.extrabold}" },
+      "labelFont": { "$value": "{typography.fontFamily.body}" },
+      "labelFontSize": { "$value": "{typography.fontSize.xs}" },
+      "labelFontWeight": { "$value": "{typography.fontWeight.bold}" },
+      "labelTextTransform": { "$value": "uppercase" },
+      "labelLetterSpacing": { "$value": "{typography.letterSpacing.wider}" },
+      "labelColor": { "$value": "{color.text.secondary}" },
+      "accentBar": {
+        "$description": "Colored top-border accent strip on KPI cards — 4px solid accent color.",
+        "height": { "$value": "4px" },
+        "yellow": { "$value": "{color.accent.yellow}" },
+        "green": { "$value": "{color.accent.green}" },
+        "blue": { "$value": "{color.accent.blue}" },
+        "coral": { "$value": "{color.accent.coral}" }
+      }
+    },
+
+    "alert": {
+      "$description": "Alert/notification banner tokens.",
+      "border": { "$value": "2px solid #000000" },
+      "radius": { "$value": "{border.radius.none}" },
+      "shadow": { "$value": "{shadow.sm}" },
+      "paddingX": { "$value": "{spacing.4}" },
+      "paddingY": { "$value": "{spacing.4}" },
+      "fontSize": { "$value": "{typography.fontSize.sm}" },
+      "fontWeight": { "$value": "{typography.fontWeight.medium}" },
+      "variants": {
+        "success": { "background": "{color.accent.green}", "borderLeft": "4px solid #000000" },
+        "warning": { "background": "{color.accent.orange}", "borderLeft": "4px solid #000000" },
+        "error": { "background": "{color.accent.coral}", "borderLeft": "4px solid #000000" },
+        "info": { "background": "{color.accent.blue}", "borderLeft": "4px solid #000000" }
+      }
+    },
+
+    "tabs": {
+      "$description": "Tab navigation tokens.",
+      "borderBottom": { "$value": "3px solid #000000" },
+      "tab": {
+        "default": {
+          "background": { "$value": "transparent" },
+          "color": { "$value": "{color.text.secondary}" },
+          "fontWeight": { "$value": "{typography.fontWeight.semibold}" },
+          "fontSize": { "$value": "{typography.fontSize.sm}" },
+          "paddingX": { "$value": "{spacing.5}" },
+          "paddingY": { "$value": "{spacing.3}" },
+          "border": { "$value": "none" }
+        },
+        "active": {
+          "background": { "$value": "{color.accent.yellow}" },
+          "color": { "$value": "{color.text.on-accent}" },
+          "fontWeight": { "$value": "{typography.fontWeight.bold}" },
+          "border": { "$value": "3px solid #000000" },
+          "borderBottom": { "$value": "3px solid {color.accent.yellow}", "$description": "Merges with content below by matching tab background." },
+          "shadow": { "$value": "none" }
+        }
+      }
+    }
+  },
+
+  "zIndex": {
+    "$description": "Z-index stacking layers.",
+    "base": { "$value": 0 },
+    "above": { "$value": 1 },
+    "dropdown": { "$value": 100 },
+    "sticky": { "$value": 200 },
+    "sidebar": { "$value": 300 },
+    "topbar": { "$value": 400 },
+    "overlay": { "$value": 500 },
+    "modal": { "$value": 600 },
+    "toast": { "$value": 700 },
+    "tooltip": { "$value": 800 }
+  },
+
+  "breakpoint": {
+    "$description": "Responsive breakpoints.",
+    "sm": { "$value": "640px" },
+    "md": { "$value": "768px" },
+    "lg": { "$value": "1024px" },
+    "xl": { "$value": "1280px" },
+    "2xl": { "$value": "1536px" }
+  }
+}

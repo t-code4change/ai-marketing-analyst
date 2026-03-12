@@ -1,0 +1,65 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users can only read/write their own user doc
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Websites: owner can CRUD
+    match /websites/{websiteId} {
+      allow read, write: if request.auth != null &&
+        request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null &&
+        request.resource.data.userId == request.auth.uid;
+    }
+
+    // Connections: website owner only (checked via website lookup)
+    match /connections/{connectionId} {
+      allow read, write: if request.auth != null &&
+        exists(/databases/$(database)/documents/websites/$(resource.data.websiteId)) &&
+        get(/databases/$(database)/documents/websites/$(resource.data.websiteId)).data.userId == request.auth.uid;
+    }
+
+    // Analytics data: website owner only
+    match /analytics_data/{docId} {
+      allow read: if request.auth != null &&
+        exists(/databases/$(database)/documents/websites/$(resource.data.websiteId)) &&
+        get(/databases/$(database)/documents/websites/$(resource.data.websiteId)).data.userId == request.auth.uid;
+      allow write: if false; // Admin SDK only
+    }
+
+    // Ads data: website owner only
+    match /ads_data/{docId} {
+      allow read: if request.auth != null &&
+        exists(/databases/$(database)/documents/websites/$(resource.data.websiteId)) &&
+        get(/databases/$(database)/documents/websites/$(resource.data.websiteId)).data.userId == request.auth.uid;
+      allow write: if false;
+    }
+
+    // Search console data: website owner only
+    match /search_console_data/{docId} {
+      allow read: if request.auth != null &&
+        exists(/databases/$(database)/documents/websites/$(resource.data.websiteId)) &&
+        get(/databases/$(database)/documents/websites/$(resource.data.websiteId)).data.userId == request.auth.uid;
+      allow write: if false;
+    }
+
+    // GitHub analysis: website owner only
+    match /github_analysis/{docId} {
+      allow read: if request.auth != null &&
+        exists(/databases/$(database)/documents/websites/$(resource.data.websiteId)) &&
+        get(/databases/$(database)/documents/websites/$(resource.data.websiteId)).data.userId == request.auth.uid;
+      allow write: if false;
+    }
+
+    // AI reports: website owner only
+    match /ai_reports/{docId} {
+      allow read: if request.auth != null &&
+        exists(/databases/$(database)/documents/websites/$(resource.data.websiteId)) &&
+        get(/databases/$(database)/documents/websites/$(resource.data.websiteId)).data.userId == request.auth.uid;
+      allow write: if false;
+    }
+  }
+}

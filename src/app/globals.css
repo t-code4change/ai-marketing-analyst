@@ -1,27 +1,838 @@
+/* ============================================================
+   AI Marketing Analyst — Neo-Brutalism Design System
+   CSS Custom Properties (Design Tokens)
+   ============================================================
+
+   PHILOSOPHY:
+   Neo-Brutalism takes the raw, utilitarian aesthetics of architectural
+   Brutalism and applies them to digital interfaces with a modern twist:
+   bold saturated colors, thick black borders, hard offset drop-shadows
+   (zero blur), heavy sans-serif typography, and zero border radius.
+
+   Key rules:
+   1. Borders are ALWAYS black and ALWAYS thick (2px minimum)
+   2. Shadows are ALWAYS hard-offset (no blur, no spread)
+   3. Colors are ALWAYS solid fills — no gradients, no opacity overlays
+   4. Corners are ALWAYS sharp — zero border radius
+   5. Hover = translate(-2px, -2px) + shadow grows
+   6. Active = translate(+2px, +2px) + shadow collapses to none
+   7. Typography weights lean heavy: 700–800 dominate
+   ============================================================ */
+
+/* ── Google Fonts ──────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap');
+
+/* ── Tailwind directives ───────────────────────────────────── */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   DESIGN TOKENS — CSS CUSTOM PROPERTIES
+   ============================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ── Color: Base ────────────────────────────────────────── */
+  --color-black: #000000;
+  --color-white: #FFFFFF;
+
+  /* ── Color: Accent Palette ──────────────────────────────── */
+  /* These 6 bold saturated colors are the visual signature
+     of Neo-Brutalism. Use as fills for cards, buttons, badges. */
+  --color-yellow:         #FFE500;
+  --color-yellow-dark:    #D4BE00;
+  --color-coral:          #FF6B6B;
+  --color-coral-dark:     #E04545;
+  --color-green:          #4DFFB4;
+  --color-green-dark:     #00D98B;
+  --color-blue:           #4D79FF;
+  --color-blue-dark:      #2255DD;
+  --color-orange:         #FF8C00;
+  --color-orange-dark:    #CC6F00;
+  --color-purple:         #9B5DE5;
+  --color-purple-dark:    #7534C4;
+
+  /* ── Color: Backgrounds ─────────────────────────────────── */
+  --bg-page:              #FAFAFA;  /* App-level background */
+  --bg-canvas:            #FFFFFF;  /* Cards, panels, modals */
+  --bg-subtle:            #F5F5F5;  /* Table rows, code blocks */
+  --bg-muted:             #EBEBEB;  /* Disabled, dividers, skeleton */
+  --bg-sidebar:           #0A0A0A;  /* Near-black sidebar */
+  --bg-sidebar-hover:     #1A1A1A;
+  --bg-sidebar-active:    #FFE500;  /* Yellow active nav item */
+
+  /* ── Color: Text ────────────────────────────────────────── */
+  --text-primary:         #0A0A0A;  /* Near-black body text */
+  --text-secondary:       #3D3D3D;  /* Supporting / caption text */
+  --text-muted:           #737373;  /* Placeholder, helper, disabled */
+  --text-inverse:         #FFFFFF;  /* White text on dark surfaces */
+  --text-on-accent:       #000000;  /* Black text on accent fills */
+  --text-link:            #4D79FF;
+  --text-link-hover:      #2255DD;
+
+  /* ── Color: Borders ─────────────────────────────────────── */
+  /* There is ONE border color in Neo-Brutalism: black.
+     No light grey borders. No subtle separators. */
+  --border-color:         #000000;
+  --border-focus:         #4D79FF;  /* Blue focus ring only */
+  --border-sidebar:       #2A2A2A;  /* Dark sidebar internal dividers */
+
+  /* ── Color: Semantic ────────────────────────────────────── */
+  --color-success:        #4DFFB4;
+  --color-success-text:   #006644;
+  --color-warning:        #FF8C00;
+  --color-warning-text:   #7A3E00;
+  --color-error:          #FF6B6B;
+  --color-error-text:     #7A0000;
+  --color-info:           #4D79FF;
+  --color-info-text:      #00217A;
+
+  /* ── Color: Charts ──────────────────────────────────────── */
+  /* Use in order for multi-series data visualizations */
+  --chart-1: #FFE500;
+  --chart-2: #4D79FF;
+  --chart-3: #FF6B6B;
+  --chart-4: #4DFFB4;
+  --chart-5: #FF8C00;
+  --chart-6: #9B5DE5;
+
+  /* ── Typography: Families ───────────────────────────────── */
+  --font-display: 'Syne', 'Space Grotesk', sans-serif;
+  --font-body:    'Space Grotesk', 'Inter', sans-serif;
+  --font-mono:    'DM Mono', 'Space Mono', 'Fira Code', monospace;
+
+  /* ── Typography: Weights ────────────────────────────────── */
+  --fw-light:     300;
+  --fw-regular:   400;
+  --fw-medium:    500;
+  --fw-semibold:  600;
+  --fw-bold:      700;
+  --fw-extrabold: 800;
+
+  /* ── Typography: Sizes ──────────────────────────────────── */
+  --fs-2xs:  0.625rem;  /* 10px */
+  --fs-xs:   0.75rem;   /* 12px */
+  --fs-sm:   0.875rem;  /* 14px */
+  --fs-base: 1rem;      /* 16px */
+  --fs-lg:   1.125rem;  /* 18px */
+  --fs-xl:   1.25rem;   /* 20px */
+  --fs-2xl:  1.5rem;    /* 24px */
+  --fs-3xl:  1.875rem;  /* 30px */
+  --fs-4xl:  2.25rem;   /* 36px */
+  --fs-5xl:  3rem;      /* 48px */
+  --fs-6xl:  3.75rem;   /* 60px */
+  --fs-7xl:  4.5rem;    /* 72px */
+
+  /* ── Typography: Line Heights ───────────────────────────── */
+  --lh-none:    1;
+  --lh-tight:   1.15;
+  --lh-snug:    1.3;
+  --lh-normal:  1.5;
+  --lh-relaxed: 1.625;
+  --lh-loose:   2;
+
+  /* ── Typography: Letter Spacing ─────────────────────────── */
+  --ls-tighter: -0.05em;
+  --ls-tight:   -0.025em;
+  --ls-normal:  0em;
+  --ls-wide:    0.05em;
+  --ls-wider:   0.1em;
+  --ls-widest:  0.2em;
+
+  /* ── Borders ────────────────────────────────────────────── */
+  --border-hairline: 1px;
+  --border-thin:     1.5px;
+  --border-default:  2px;
+  --border-medium:   3px;
+  --border-thick:    4px;
+  --border-heavy:    6px;
+
+  /* ── Border Radius ──────────────────────────────────────── */
+  /* Neo-Brutalism: ZERO radius. Sharp corners are mandatory. */
+  --radius-none: 0px;
+  --radius-xs:   2px;  /* Maximum allowed. Use only for micro-elements. */
+
+  /* ── Shadows ────────────────────────────────────────────── */
+  /* SIGNATURE Neo-Brutalism: hard offset, zero blur.
+     Formula: Xpx Ypx 0px 0px #000000
+     The element appears to float above a flat surface.
+     Hover grows the shadow; Active collapses it to none. */
+  --shadow-none:     none;
+  --shadow-xs:       2px 2px 0px 0px #000000;
+  --shadow-sm:       3px 3px 0px 0px #000000;
+  --shadow-md:       4px 4px 0px 0px #000000;
+  --shadow-lg:       6px 6px 0px 0px #000000;
+  --shadow-xl:       8px 8px 0px 0px #000000;
+  --shadow-2xl:      12px 12px 0px 0px #000000;
+  --shadow-topbar:   0px 3px 0px 0px #000000;
+  --shadow-inset:    inset 3px 3px 0px 0px #000000;
+  /* Hover variants (shadow grows while element translates -2px/-2px) */
+  --shadow-hover-xs: 4px 4px 0px 0px #000000;
+  --shadow-hover-sm: 5px 5px 0px 0px #000000;
+  --shadow-hover-md: 6px 6px 0px 0px #000000;
+  --shadow-hover-lg: 8px 8px 0px 0px #000000;
+  --shadow-hover-xl: 10px 10px 0px 0px #000000;
+  /* White shadow variants (for elements on dark backgrounds) */
+  --shadow-white-sm: 3px 3px 0px 0px #FFFFFF;
+  --shadow-white-md: 4px 4px 0px 0px #FFFFFF;
+  --shadow-white-lg: 6px 6px 0px 0px #FFFFFF;
+
+  /* ── Interaction ────────────────────────────────────────── */
+  --transition-fast:    100ms ease-out;
+  --transition-default: 150ms ease-out;
+  --transition-slow:    200ms ease-in-out;
+  /* Always transition ONLY transform and box-shadow */
+  --transition-props:   transform, box-shadow;
+
+  /* ── Layout ─────────────────────────────────────────────── */
+  --sidebar-width:           256px;
+  --sidebar-width-collapsed: 64px;
+  --topbar-height:           64px;
+
+  /* ── Tailwind bridge variables ───────────────────────────── */
+  /* These feed into Tailwind's bg-background and text-foreground utilities */
+  --background: var(--bg-page);
+  --foreground: var(--text-primary);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+  color: var(--text-primary);
+  background-color: var(--bg-page);
 }
 
+/* ── Headings ─────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-extrabold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  color: var(--text-primary);
+}
+
+h1 { font-size: var(--fs-4xl); letter-spacing: var(--ls-tighter); }
+h2 { font-size: var(--fs-3xl); }
+h3 { font-size: var(--fs-2xl); }
+h4 { font-size: var(--fs-xl); }
+h5 { font-size: var(--fs-lg); }
+h6 { font-size: var(--fs-base); }
+
+/* ── Links ────────────────────────────────────────────────── */
+a {
+  color: var(--text-link);
+  font-weight: var(--fw-medium);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: var(--transition-props) var(--transition-default);
+}
+a:hover { color: var(--text-link-hover); }
+
+/* ── Code / Pre ───────────────────────────────────────────── */
+code, pre, kbd, samp {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+}
+
+/* ── Focus ────────────────────────────────────────────────── */
+/* Keyboard focus uses electric blue outline, NOT the black border system */
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ============================================================
+   COMPONENT UTILITY CLASSES
+   Neo-Brutalism building blocks — compose these via @apply
+   or use directly in JSX className strings.
+   ============================================================ */
+
+@layer components {
+
+  /* ── Neo-Brutalism interaction base ─────────────────────── */
+  /* Apply to any element that should lift on hover and press on click */
+  .neo-interactive {
+    transition: var(--transition-props) var(--transition-default);
+    cursor: pointer;
+  }
+  .neo-interactive:hover {
+    transform: translate(-2px, -2px);
+  }
+  .neo-interactive:active {
+    transform: translate(2px, 2px);
+  }
+
+  /* ── Cards ──────────────────────────────────────────────── */
+  .card {
+    background-color: var(--bg-canvas);
+    border: var(--border-medium) solid var(--border-color);
+    border-radius: var(--radius-none);
+    box-shadow: var(--shadow-lg);
+    padding: 1.5rem;
+    transition: var(--transition-props) var(--transition-default);
+  }
+  .card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-hover-lg);
+  }
+  .card:active {
+    transform: translate(2px, 2px);
+    box-shadow: var(--shadow-none);
+  }
+
+  .card-featured {
+    border-width: var(--border-thick);
+    box-shadow: var(--shadow-xl);
+  }
+  .card-featured:hover {
+    box-shadow: var(--shadow-hover-xl);
+  }
+
+  /* Accent card variants */
+  .card-yellow  { background-color: var(--color-yellow); }
+  .card-coral   { background-color: var(--color-coral); }
+  .card-green   { background-color: var(--color-green); }
+  .card-blue    { background-color: var(--color-blue); }
+  .card-orange  { background-color: var(--color-orange); }
+  .card-purple  { background-color: var(--color-purple); }
+  .card-black   { background-color: var(--color-black); color: var(--text-inverse); }
+
+  /* ── KPI / Metric Cards ─────────────────────────────────── */
+  .kpi-card {
+    background-color: var(--bg-canvas);
+    border: var(--border-medium) solid var(--border-color);
+    border-radius: var(--radius-none);
+    box-shadow: var(--shadow-xl);
+    padding: 1.5rem;
+    transition: var(--transition-props) var(--transition-default);
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card::before {
+    /* Accent color top bar — override with inline style: --kpi-accent: #FFE500 */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: var(--kpi-accent, var(--color-yellow));
+  }
+  .kpi-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-hover-xl);
+  }
+  .kpi-card:active {
+    transform: translate(2px, 2px);
+    box-shadow: var(--shadow-none);
+  }
+  .kpi-value {
+    font-family: var(--font-mono);
+    font-size: var(--fs-4xl);
+    font-weight: var(--fw-extrabold);
+    line-height: var(--lh-none);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-tight);
+  }
+  .kpi-label {
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wider);
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+  }
+
+  /* ── Buttons ─────────────────────────────────────────────── */
+  /* Base button — apply to all button variants */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: var(--fs-base);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wide);
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    border-radius: var(--radius-none);
+    border: var(--border-default) solid var(--border-color);
+    padding: 0.75rem 1.5rem;
+    transition: var(--transition-props) var(--transition-default);
+    user-select: none;
+  }
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Primary — electric yellow */
+  .btn-primary {
+    background-color: var(--color-yellow);
+    color: var(--text-on-accent);
+    box-shadow: var(--shadow-md);
+  }
+  .btn-primary:hover {
+    background-color: var(--color-yellow-dark);
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-hover-md);
+  }
+  .btn-primary:active {
+    transform: translate(2px, 2px);
+    box-shadow: var(--shadow-none);
+  }
+
+  /* Secondary — white */
+  .btn-secondary {
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-md);
+  }
+  .btn-secondary:hover {
+    background-color: var(--bg-subtle);
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-hover-md);
+  }
+  .btn-secondary:active {
+    transform: translate(2px, 2px);
+    box-shadow: var(--shadow-none);
+  }
+
+  /* Ghost — transparent until hover */
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--text-primary);
+    border-color: transparent;
+    box-shadow: none;
+    text-transform: none;
+    font-weight: var(--fw-medium);
+  }
+  .btn-ghost:hover {
+    background-color: var(--bg-subtle);
+    border-color: var(--border-color);
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-sm);
+  }
+  .btn-ghost:active {
+    transform: translate(2px, 2px);
+    box-shadow: var(--shadow-none);
+  }
+
+  /* Destructive — coral red */
+  .btn-destructive {
+    background-color: var(--color-coral);
+    color: var(--text-on-accent);
+    box-shadow: var(--shadow-md);
+  }
+  .btn-destructive:hover {
+    background-color: var(--color-coral-dark);
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-hover-md);
+  }
+  .btn-destructive:active {
+    transform: translate(2px, 2px);
+    box-shadow: var(--shadow-none);
+  }
+
+  /* Accent color button variants */
+  .btn-coral   { background-color: var(--color-coral);  color: var(--text-on-accent); }
+  .btn-green   { background-color: var(--color-green);  color: var(--text-on-accent); }
+  .btn-blue    { background-color: var(--color-blue);   color: var(--text-inverse);   }
+  .btn-orange  { background-color: var(--color-orange); color: var(--text-on-accent); }
+  .btn-purple  { background-color: var(--color-purple); color: var(--text-inverse);   }
+  .btn-black   { background-color: var(--color-black);  color: var(--text-inverse);   }
+  /* Apply shared shadow + hover behavior to all accent variants */
+  .btn-coral, .btn-green, .btn-blue, .btn-orange, .btn-purple, .btn-black {
+    box-shadow: var(--shadow-md);
+  }
+  .btn-coral:hover, .btn-green:hover, .btn-blue:hover,
+  .btn-orange:hover, .btn-purple:hover, .btn-black:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-hover-md);
+  }
+  .btn-coral:active, .btn-green:active, .btn-blue:active,
+  .btn-orange:active, .btn-purple:active, .btn-black:active {
+    transform: translate(2px, 2px);
+    box-shadow: var(--shadow-none);
+  }
+
+  /* Button size variants */
+  .btn-xs { font-size: var(--fs-xs);   padding: 0.375rem 0.75rem; }
+  .btn-sm { font-size: var(--fs-sm);   padding: 0.5rem 1rem; }
+  .btn-md { font-size: var(--fs-base); padding: 0.75rem 1.5rem; }
+  .btn-lg { font-size: var(--fs-lg);   padding: 1rem 2rem; }
+  .btn-xl { font-size: var(--fs-xl);   padding: 1.25rem 2.5rem; }
+
+  /* ── Inputs ──────────────────────────────────────────────── */
+  .input {
+    display: block;
+    width: 100%;
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: var(--fs-base);
+    font-weight: var(--fw-medium);
+    border: var(--border-default) solid var(--border-color);
+    border-radius: var(--radius-none);
+    box-shadow: var(--shadow-sm);
+    padding: 0.75rem 1rem;
+    transition: var(--transition-props) var(--transition-default);
+    outline: none;
+  }
+  .input::placeholder { color: var(--text-muted); }
+  .input:focus {
+    box-shadow: var(--shadow-md);
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+  .input:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background-color: var(--bg-muted);
+  }
+  .input-error {
+    border-color: var(--color-coral);
+  }
+
+  .input-label {
+    display: block;
+    font-family: var(--font-body);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wider);
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── Badges / Tags ───────────────────────────────────────── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-widest);
+    line-height: 1;
+    border: var(--border-default) solid var(--border-color);
+    border-radius: var(--radius-none);
+    box-shadow: var(--shadow-xs);
+    padding: 0.125rem 0.5rem;
+    white-space: nowrap;
+  }
+
+  .badge-success { background-color: var(--color-green);  color: var(--text-on-accent); }
+  .badge-warning { background-color: var(--color-orange); color: var(--text-on-accent); }
+  .badge-error   { background-color: var(--color-coral);  color: var(--text-on-accent); }
+  .badge-info    { background-color: var(--color-blue);   color: var(--text-inverse);   }
+  .badge-primary { background-color: var(--color-yellow); color: var(--text-on-accent); }
+  .badge-purple  { background-color: var(--color-purple); color: var(--text-inverse);   }
+  .badge-neutral { background-color: var(--bg-muted);     color: var(--text-primary);   }
+  .badge-outline { background-color: transparent;         color: var(--text-primary);   }
+
+  /* Badge size variants */
+  .badge-sm { font-size: 0.6rem; padding: 0.1rem 0.375rem; }
+  .badge-lg { font-size: var(--fs-sm); padding: 0.25rem 0.625rem; }
+
+  /* ── Sidebar ──────────────────────────────────────────────── */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    background-color: var(--bg-sidebar);
+    border-right: var(--border-medium) solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    z-index: 300;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .sidebar-logo {
+    padding: 1.25rem 1rem;
+    border-bottom: 2px solid var(--border-sidebar);
+    font-family: var(--font-display);
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-extrabold);
+    color: var(--text-inverse);
+    letter-spacing: var(--ls-tight);
+  }
+
+  .sidebar-section-label {
+    padding: 0.75rem 0.75rem 0.375rem;
+    font-family: var(--font-body);
+    font-size: var(--fs-2xs);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-widest);
+    color: var(--sidebar-text, #4A4A4A);
+    border-top: 1px solid var(--border-sidebar);
+    margin-top: 0.5rem;
+  }
+  .sidebar-section-label:first-of-type {
+    border-top: none;
+    margin-top: 0;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 0.75rem;
+    font-family: var(--font-body);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    color: #A3A3A3;
+    border: 2px solid transparent;
+    border-radius: var(--radius-none);
+    cursor: pointer;
+    transition: color 150ms ease-out, background-color 150ms ease-out, border-color 150ms ease-out;
+    text-decoration: none;
+  }
+  .nav-item:hover {
+    background-color: var(--bg-sidebar-hover);
+    color: var(--text-inverse);
+    border-color: #3A3A3A;
+  }
+  .nav-item.active,
+  .nav-item[aria-current="page"] {
+    background-color: var(--bg-sidebar-active);  /* Electric yellow */
+    color: var(--text-on-accent);                /* Black */
+    font-weight: var(--fw-bold);
+    border-color: var(--border-color);
+    box-shadow: 3px 3px 0px 0px #000000;
+  }
+
+  /* ── Topbar ───────────────────────────────────────────────── */
+  .topbar {
+    position: sticky;
+    top: 0;
+    height: var(--topbar-height);
+    background-color: var(--bg-canvas);
+    border-bottom: var(--border-medium) solid var(--border-color);
+    box-shadow: var(--shadow-topbar);
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    z-index: 400;
+  }
+
+  /* ── Main content area ──────────────────────────────────────── */
+  .main-content {
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    background-color: var(--bg-page);
+  }
+  .page-padding {
+    padding: 1.5rem 2rem;
+  }
+
+  /* ── Tables ──────────────────────────────────────────────── */
+  .neo-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: var(--border-default) solid var(--border-color);
+  }
+  .neo-table thead th {
+    background-color: var(--color-black);
+    color: var(--text-inverse);
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wider);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border: 1px solid var(--border-color);
+  }
+  .neo-table tbody td {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+  }
+  .neo-table tbody tr:nth-child(even) {
+    background-color: var(--bg-subtle);
+  }
+  .neo-table tbody tr:hover {
+    background-color: var(--color-yellow);
+    color: var(--text-on-accent);
+  }
+
+  /* ── Tabs ────────────────────────────────────────────────── */
+  .tabs {
+    display: flex;
+    border-bottom: var(--border-medium) solid var(--border-color);
+  }
+  .tab {
+    padding: 0.75rem 1.25rem;
+    font-family: var(--font-body);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    color: var(--text-secondary);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    transition: var(--transition-props) var(--transition-default);
+  }
+  .tab:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-subtle);
+  }
+  .tab.active {
+    background-color: var(--color-yellow);
+    color: var(--text-on-accent);
+    font-weight: var(--fw-bold);
+    border: var(--border-medium) solid var(--border-color);
+    border-bottom-color: var(--color-yellow); /* Merges with content area */
+    margin-bottom: -3px;
+  }
+
+  /* ── Alerts / Notifications ──────────────────────────────── */
+  .alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: var(--border-default) solid var(--border-color);
+    border-left-width: var(--border-thick);
+    border-radius: var(--radius-none);
+    box-shadow: var(--shadow-sm);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+  }
+  .alert-success { background-color: var(--color-green); }
+  .alert-warning { background-color: var(--color-orange); }
+  .alert-error   { background-color: var(--color-coral); }
+  .alert-info    { background-color: var(--color-blue);   color: var(--text-inverse); }
+
+  /* ── Modal ───────────────────────────────────────────────── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .modal {
+    background-color: var(--bg-canvas);
+    border: var(--border-medium) solid var(--border-color);
+    border-radius: var(--radius-none);
+    box-shadow: var(--shadow-2xl);
+    padding: 2rem;
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 600;
+  }
+
+  /* ── Section / Page title styles ─────────────────────────── */
+  .page-title {
+    font-family: var(--font-display);
+    font-size: var(--fs-4xl);
+    font-weight: var(--fw-extrabold);
+    letter-spacing: var(--ls-tighter);
+    line-height: var(--lh-tight);
+    color: var(--text-primary);
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: var(--fs-2xl);
+    font-weight: var(--fw-extrabold);
+    letter-spacing: var(--ls-tight);
+    color: var(--text-primary);
+  }
+  .section-eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-widest);
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* ============================================================
+   UTILITY LAYER EXTENSIONS
+   ============================================================ */
+
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .text-balance { text-wrap: balance; }
+
+  /* Monospaced numeric figures for stat displays */
+  .tabular-nums { font-variant-numeric: tabular-nums; }
+
+  /* Hard offset shadow utilities using CSS vars */
+  .shadow-neo-xs   { box-shadow: var(--shadow-xs); }
+  .shadow-neo-sm   { box-shadow: var(--shadow-sm); }
+  .shadow-neo-md   { box-shadow: var(--shadow-md); }
+  .shadow-neo-lg   { box-shadow: var(--shadow-lg); }
+  .shadow-neo-xl   { box-shadow: var(--shadow-xl); }
+  .shadow-neo-2xl  { box-shadow: var(--shadow-2xl); }
+
+  /* Interaction pattern utility — apply to any interactive container */
+  .neo-lift {
+    transition: transform 150ms ease-out, box-shadow 150ms ease-out;
+  }
+  .neo-lift:hover  { transform: translate(-2px, -2px); }
+  .neo-lift:active { transform: translate(2px, 2px); }
+
+  /* Thick border utilities */
+  .border-neo   { border: 2px solid var(--border-color); }
+  .border-neo-3 { border: 3px solid var(--border-color); }
+  .border-neo-4 { border: 4px solid var(--border-color); }
+
+  /* Sharp corners enforcer */
+  .corners-sharp { border-radius: 0px !important; }
+
+  /* Font family utilities */
+  .font-display { font-family: var(--font-display); }
+  .font-body    { font-family: var(--font-body); }
+  .font-mono    { font-family: var(--font-mono); }
+
+  /* Uppercase label pattern */
+  .label-style {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wider);
+    color: var(--text-secondary);
   }
 }

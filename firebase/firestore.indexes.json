@@ -1,0 +1,45 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "websites",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "analytics_data",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "websiteId", "order": "ASCENDING" },
+        { "fieldPath": "date", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "search_console_data",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "websiteId", "order": "ASCENDING" },
+        { "fieldPath": "date", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "ai_reports",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "websiteId", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "github_analysis",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "websiteId", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
