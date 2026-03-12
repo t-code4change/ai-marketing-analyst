@@ -1,4 +1,5 @@
 import { BetaAnalyticsDataClient } from '@google-analytics/data';
+import { OAuth2Client } from 'google-auth-library';
 import { AnalyticsData, AnalyticsSummary } from '@/types';
 
 export async function fetchAnalyticsData(
@@ -6,9 +7,9 @@ export async function fetchAnalyticsData(
   accessToken: string,
   days = 30
 ): Promise<AnalyticsData[]> {
-  const client = new BetaAnalyticsDataClient({
-    authClient: { getRequestHeaders: async () => ({ Authorization: `Bearer ${accessToken}` }) } as any,
-  });
+  const authClient = new OAuth2Client();
+  authClient.setCredentials({ access_token: accessToken });
+  const client = new BetaAnalyticsDataClient({ authClient } as any);
 
   const [response] = await client.runReport({
     property: `properties/${propertyId}`,

@@ -51,7 +51,8 @@ export async function POST(request: NextRequest) {
       const scConn = await getGoogleConnection(websiteId, 'search_console') as any;
       if (scConn) {
         const token = await getValidGoogleTokens(scConn.id);
-        const { queries, pages } = await fetchSearchConsoleData(`https://${website.domain}`, token);
+        const siteUrl = scConn.siteUrl || `https://${website.domain}`;
+        const { queries, pages } = await fetchSearchConsoleData(siteUrl, token);
         const batch = adminDb.batch();
         for (const item of [...queries, ...pages]) {
           const key = item.type === 'query' ? item.query : item.page;
