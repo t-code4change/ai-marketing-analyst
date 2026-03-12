@@ -30,7 +30,7 @@ export function useAIReport(websiteId?: string) {
     fetchReports();
   }, [fetchReports]);
 
-  const generateReport = useCallback(async () => {
+  const generateReport = useCallback(async (options?: { provider?: string; apiKey?: string; model?: string }) => {
     if (!websiteId) return;
     setGenerating(true);
     setError(null);
@@ -38,7 +38,12 @@ export function useAIReport(websiteId?: string) {
       const res = await fetch('/api/ai/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ websiteId }),
+        body: JSON.stringify({ 
+          websiteId,
+          provider: options?.provider,
+          apiKey: options?.apiKey,
+          model: options?.model,
+        }),
       });
       if (!res.ok) throw new Error('Failed to generate report');
       const data = await res.json();

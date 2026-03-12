@@ -6,8 +6,9 @@ import { AIReportCard } from '@/components/reports/AIReportCard';
 import { IssuesList } from '@/components/reports/IssuesList';
 import { OpportunitiesList } from '@/components/reports/OpportunitiesList';
 import { KeywordsTable } from '@/components/reports/KeywordsTable';
-import { Zap, AlertTriangle, TrendingUp, Key, Map } from 'lucide-react';
-import { useState } from 'react';
+import { AIProviderSelector } from '@/components/settings/AIProviderSelector';
+import { Zap, AlertTriangle, TrendingUp, Key, Map, Settings2 } from 'lucide-react';
+import { useState, useCallback } from 'react';
 import { AIStrategy } from '@/types';
 
 function StrategiesList({ strategies }: { strategies: AIStrategy[] }) {
@@ -54,6 +55,13 @@ export default function ReportsPage() {
   const { currentWebsite } = useWebsite();
   const { latestReport, loading, generating, generateReport } = useAIReport(currentWebsite?.id);
   const [activeTab, setActiveTab] = useState('overview');
+  const [showProviderSelector, setShowProviderSelector] = useState(false);
+  const [providerType, setProviderType] = useState<'claude-cli' | 'openai'>('claude-cli');
+  const [providerConfig, setProviderConfig] = useState<{ apiKey?: string; model?: string }>({});
+
+  function handleGenerate() {
+    generateReport({ provider: providerType, ...providerConfig });
+  }
 
   return (
     <div className="space-y-6">
@@ -62,15 +70,45 @@ export default function ReportsPage() {
           <h1 className="font-black text-2xl tracking-tight">AI REPORTS</h1>
           <p className="text-sm font-bold text-black/50 uppercase tracking-wider">MARKETING INTELLIGENCE</p>
         </div>
-        <button
-          onClick={generateReport}
-          disabled={generating || !currentWebsite}
-          className="flex items-center gap-2 border-[2px] border-black bg-[#FFE500] px-5 py-2.5 font-black text-sm shadow-[3px_3px_0px_#000] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_#000] transition-all disabled:opacity-50"
-        >
-          <Zap className="w-4 h-4" strokeWidth={3} />
-          {generating ? 'GENERATING...' : 'GENERATE NEW REPORT'}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowProviderSelector(!showProviderSelector)}
+            className={`border-[2px] border-black p-2.5 shadow-[2px_2px_0px_#000] hover:shadow-[3px_3px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all ${showProviderSelector ? 'bg-black text-[#FFE500]' : 'bg-white'}`}
+            title="AI Provider"
+          >
+            <Settings2 className="w-4 h-4" strokeWidth={2.5} />
+          </button>
+          <button
+            onClick={handleGenerate}
+            disabled={generating || !currentWebsite}
+            className="flex items-center gap-2 border-[2px] border-black bg-[#FFE500] px-5 py-2.5 font-black text-sm shadow-[3px_3px_0px_#000] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_#000] transition-all disabled:opacity-50"
+          >
+            <Zap className="w-4 h-4" strokeWidth={3} />
+            {generating ? `ANALYZING via ${providerType === 'claude-cli' ? 'CLAUDE' : 'GPT-4o'}...` : 'GENERATE REPORT'}
+          </button>
+        </div>
       </div>
+
+      {/* Provider selector panel */}
+      {showProviderSelector && (
+        <div className="border-[3px] border-black bg-[#FFFEF0] shadow-[4px_4px_0px_#000] p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <Settings2 className="w-4 h-4" strokeWidth={2.5} />
+            <h3 className="font-black text-sm uppercase tracking-wider">AI PROVIDER</h3>
+            <div className={`ml-2 border-[1.5px] border-black px-2 py-0.5 text-[10px] font-black ${providerType === 'claude-cli' ? 'bg-[#FFE500]' : 'bg-[#4D79FF] text-white'}`}>
+              {providerType === 'claude-cli' ? 'CLAUDE CODE' : 'OPENAI'}
+            </div>
+          </div>
+          <AIProviderSelector
+            value={providerType}
+            onChange={(type, config) => {
+              setProviderType(type);
+              setProviderConfig(config || {});
+            }}
+            disabled={generating}
+          />
+        </div>
+      )}
 
       {!latestReport && !loading ? (
         <div className="border-[3px] border-black bg-white shadow-[6px_6px_0px_#000] p-12 text-center">
@@ -82,7 +120,7 @@ export default function ReportsPage() {
             Generate your first AI analysis to get actionable insights on your marketing performance.
           </p>
           <button
-            onClick={generateReport}
+            onClick={handleGenerate}
             disabled={generating || !currentWebsite}
             className="border-[2px] border-black bg-black text-[#FFE500] px-8 py-3 font-black shadow-[4px_4px_0px_#FFE500] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#FFE500] transition-all disabled:opacity-50"
           >
@@ -91,7 +129,6 @@ export default function ReportsPage() {
         </div>
       ) : latestReport ? (
         <div className="space-y-4">
-          {/* Tabs */}
           <div className="flex gap-0 border-[2px] border-black overflow-hidden">
             {tabs.map(({ id, label, icon: Icon }) => (
               <button
@@ -104,9 +141,7 @@ export default function ReportsPage() {
                 <Icon className="w-3.5 h-3.5" strokeWidth={3} />
                 {label}
                 {id === 'issues' && latestReport.issues.length > 0 && (
-                  <span className={`ml-1 border-[1.5px] border-current px-1.5 py-0.5 text-[10px] font-black ${
-                    activeTab === id ? 'border-[#FFE500]' : 'border-black'
-                  }`}>
+                  <span className={`ml-1 border-[1.5px] border-current px-1.5 py-0.5 text-[10px] font-black`}>
                     {latestReport.issues.length}
                   </span>
                 )}
@@ -114,7 +149,6 @@ export default function ReportsPage() {
             ))}
           </div>
 
-          {/* Content */}
           {activeTab === 'overview' && <AIReportCard report={latestReport} />}
           {activeTab === 'issues' && (
             <div>

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { adminAuth, adminDb } from '@/lib/firebase/admin';
 import { runAIAnalysis } from '@/lib/ai/analyzer';
 import { getLatestAnalytics, getLatestSearchConsoleData } from '@/lib/utils/firestore';
+import { AIProviderConfig } from '@/lib/ai/providers';
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,21 +10,20 @@ export async function POST(request: NextRequest) {
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     await adminAuth.verifySessionCookie(session, true);
 
-    const { websiteId } = await request.json();
+    const body = await request.json();
+    const { websiteId, provider } = body;
+    
     if (!websiteId) return NextResponse.json({ error: 'websiteId required' }, { status: 400 });
 
-    // Fetch website info
     const websiteDoc = await adminDb.collection('websites').doc(websiteId).get();
     if (!websiteDoc.exists) return NextResponse.json({ error: 'Website not found' }, { status: 404 });
     const website = websiteDoc.data()!;
 
-    // Gather all data
     const [analyticsData, searchConsoleRaw] = await Promise.all([
       getLatestAnalytics(websiteId),
       getLatestSearchConsoleData(websiteId),
     ]);
 
-    // Summarize analytics
     let analyticsSummary = undefined;
     if (analyticsData.length > 0) {
       const totals = (analyticsData as any[]).reduce(
@@ -44,7 +44,6 @@ export async function POST(request: NextRequest) {
       };
     }
 
-    // Get GitHub analysis
     const githubSnapshot = await adminDb
       .collection('github_analysis')
       .where('websiteId', '==', websiteId)
@@ -53,7 +52,18 @@ export async function POST(request: NextRequest) {
       .get();
     const githubAnalysis = githubSnapshot.empty ? undefined : githubSnapshot.docs[0].data();
 
-    // Run AI analysis
+    // Build provider config from request or env defaults
+    let providerConfig: AIProviderConfig | undefined;
+    if (provider === 'claude-cli') {
+      providerConfig = { type: 'claude-cli', claudeModel: body.model || 'claude-sonnet-4-6' };
+    } else if (provider === 'openai') {
+      providerConfig = {
+        type: 'openai',
+        openaiApiKey: body.apiKey || process.env.OPENAI_API_KEY,
+        openaiModel: body.model || 'gpt-4o',
+      };
+    }
+
     const report = await runAIAnalysis({
       websiteId,
       website: { domain: website.domain, repo: website.githubRepo },
@@ -68,6 +78,7 @@ export async function POST(request: NextRequest) {
         findings: githubAnalysis.findings,
         framework: githubAnalysis.framework,
       } : undefined,
+      providerConfig,
     });
 
     return NextResponse.json({ report });
